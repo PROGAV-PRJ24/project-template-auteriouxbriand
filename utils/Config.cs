@@ -1,15 +1,15 @@
 public class Config
 {
-    public int[] MAP_SIZE { get; }
+    public int[] MAP_SIZE { get; } = {10, 10};
 
-    private static Config instance = null;
+    private static Config? instance = null;
     public static Config Instance
     {
         get
         {
             if (instance == null)
             {
-                instance = new Singleton();
+                instance = new Config();
             }
             return instance;
         }
@@ -17,6 +17,6 @@ public class Config
 
     private Config()
     {
-        MAP_SIZE = {10, 10};
+        
     }
 }

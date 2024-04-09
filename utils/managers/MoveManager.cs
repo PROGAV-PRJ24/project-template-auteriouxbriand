@@ -4,8 +4,8 @@ public class MoveManager
     {
         if (x >= 0 && x < Config.Instance.MAP_SIZE[0] && y >= 0 && y < Config.Instance.MAP_SIZE[1])
         {
-            player.positionX = x;
-            player.positionY = y;
+            player.PositionX = x;
+            player.PositionY = y;
         }
     }
     public void Move(Player player, int direction)
@@ -13,46 +13,47 @@ public class MoveManager
         switch (direction)
         {
             case 8:
-                if(positionY == 0)
+                if(player.PositionY == 0)
                 {
-                    positionY++;
+                    player.PositionY++;
                     direction = 2;
                 }
                 else
                 {
-                    positionY--;
+                    player.PositionY--;
                 }
                 break;
             case 6:
-                if(positionX == Config.Instance.MAP_SIZE[0])
+                if(player.PositionX == Config.Instance.MAP_SIZE[0]-1)
                 {
-                    positionX--;
+                    player.PositionX--;
                     direction = 4;
                 }
                 else
                 {
-                    positionX++;
+                    player.PositionX++;
                 }
                 break;
             case 2:
-                if(positionY == Config.Instance.MAP_SIZE[1])
+                if(player.PositionY == Config.Instance.MAP_SIZE[1]-1)
                 {
-                    positionY--;
+                    player.PositionY--;
                     direction = 8;
                 }
                 else
                 {
-                    positionY++;
+                    player.PositionY++;
                 }
+                break;
             case 4:
-                if(positionX == 0)
+                if(player.PositionX == 0)
                 {
-                    positionX++;
+                    player.PositionX++;
                     direction = 6;
                 }
                 else
                 {
-                    positionX--;
+                    player.PositionX--;
                 }
                 break;
         }
