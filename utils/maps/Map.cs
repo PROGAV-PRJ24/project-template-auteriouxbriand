@@ -35,5 +35,11 @@ public class Map
         }
         return chain;
     }
+
+    public void setCurrentPosition(Player player,int x,int y)
+    {
+        Grid[player.PositionX, player.PositionY] = 1;
+        Grid[x,y] = 0;
+    }
 }
 

@@ -7,7 +7,7 @@ public class MoveManager
             player.PositionX = x;
             player.PositionY = y;
         }
-        Map.setCurrentPosition(player, player.PositionX, player.PositionY);
+        currentMap.setCurrentPosition(player, x,y);
 
     }
     public void Move(Player player, Map currentMap, int direction)
@@ -59,6 +59,6 @@ public class MoveManager
                 }
                 break;
         }
-        Map.setCurrentPosition(player, player.PositionX, player.PositionY);
+        currentMap.setCurrentPosition(player, player.PositionX, player.PositionY);
     }
 }

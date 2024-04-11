@@ -10,8 +10,19 @@ public abstract class Player
     public int PositionY { get; set; }
     public List<Object> Inventaire { get; set; }
     public int capacity { get; set; }
-    private MoveManager Mover;
-    public Map CurrentMap { get; set; }
+    protected MoveManager Mover;
+    public Map? CurrentMap { get; set; }
+
+    public bool IsAlive
+    {
+        get
+        {
+            return Health > 0;
+        }
+        set{
+            
+        }
+    }
 
     public Player(string name, int level)
     {
@@ -42,11 +53,6 @@ public abstract class Player
     public void Move(int direction)
     {
         Mover.Move(this, CurrentMap, direction);
-    }
-
-    public void Jump(int x, int y)
-    {
-        Mover.Jump(this, CurrentMap, x, y);
     }
 
     public override string ToString()

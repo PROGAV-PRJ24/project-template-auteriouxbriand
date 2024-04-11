@@ -8,12 +8,12 @@ public class Pirate : Player
     public void Attack(Player target)
     {
         base.Attack(target);
-        Health += pAttack / 2;
+        Health += pAttack / 10;
     }
 
     public void Steal(Player target)
     {
-        target.Inventaire
-        Health += pAttack;
+        this.Inventaire = target.Inventaire;
+        target.Inventaire = new List<Object>();
     }
 }
