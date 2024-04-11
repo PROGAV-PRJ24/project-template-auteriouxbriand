@@ -1,19 +1,21 @@
 public class MoveManager
 {
-    public void Jump(Player player, int x, int y)
+    public void Jump(Player player, Map currentMap, int x, int y)
     {
         if (x >= 0 && x < Config.Instance.MAP_SIZE[0] && y >= 0 && y < Config.Instance.MAP_SIZE[1])
         {
             player.PositionX = x;
             player.PositionY = y;
         }
+        Map.setCurrentPosition(player, player.PositionX, player.PositionY);
+
     }
-    public void Move(Player player, int direction)
+    public void Move(Player player, Map currentMap, int direction)
     {
         switch (direction)
         {
             case 8:
-                if(player.PositionY == 0)
+                if (player.PositionY == 0)
                 {
                     player.PositionY++;
                     direction = 2;
@@ -24,7 +26,7 @@ public class MoveManager
                 }
                 break;
             case 6:
-                if(player.PositionX == Config.Instance.MAP_SIZE[0]-1)
+                if (player.PositionX == Config.Instance.MAP_SIZE[0] - 1)
                 {
                     player.PositionX--;
                     direction = 4;
@@ -35,7 +37,7 @@ public class MoveManager
                 }
                 break;
             case 2:
-                if(player.PositionY == Config.Instance.MAP_SIZE[1]-1)
+                if (player.PositionY == Config.Instance.MAP_SIZE[1] - 1)
                 {
                     player.PositionY--;
                     direction = 8;
@@ -46,7 +48,7 @@ public class MoveManager
                 }
                 break;
             case 4:
-                if(player.PositionX == 0)
+                if (player.PositionX == 0)
                 {
                     player.PositionX++;
                     direction = 6;
@@ -57,5 +59,6 @@ public class MoveManager
                 }
                 break;
         }
+        Map.setCurrentPosition(player, player.PositionX, player.PositionY);
     }
 }
