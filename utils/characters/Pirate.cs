@@ -5,7 +5,7 @@ public class Pirate : Player
         Representer = 'P';
     }
 
-    public void Attack(Player target)
+    new public void Attack(Player target)
     {
         base.Attack(target);
         Health += pAttack / 10;

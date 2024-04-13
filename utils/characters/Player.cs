@@ -31,8 +31,8 @@ public abstract class Player
         Health = level * 10;
         Mana = level * 5;
         pAttack = level * 2;
-        PositionX = 0;
-        PositionY = 0;
+        PositionX = 15;
+        PositionY = 15;
         Inventaire = new List<Object>();
         Mover = new MoveManager();
     }

@@ -2,8 +2,7 @@
 {
     public static void Main(string[] args)
     {
-        Map map = new Map();
-        map.Render();
+        GameManager game = new GameManager();
         // for (int i = 0; i < 100; i++)
         // {
         //     Console.Clear();

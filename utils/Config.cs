@@ -1,6 +1,6 @@
 public class Config
 {
-    public int[] MAP_SIZE { get; } = { 15, 15 };
+    public int[] MAP_SIZE { get; set;} = { 30 , 90 };
 
     private static Config? instance = null;
     public static Config Instance
