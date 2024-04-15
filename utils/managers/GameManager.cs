@@ -9,6 +9,11 @@ public class GameManager
         map.GenerateIslands();
         map.PlaceBoat();
         map.Render();
+        Console.WriteLine("----");
+        Land land = new Land();
+        land.GenerateMountains();
+        land.GenerateBoat();
+        land.Render();
         // this.Rules();
     }
 

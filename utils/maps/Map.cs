@@ -1,18 +1,10 @@
 public abstract class Map
 {
-    protected int[] Dimensions = Config.Instance.MAP_SIZE;
+    // protected int[] Dimensions = Config.Instance.MAP_SIZE;
     protected char[,] Grid { get; set; }
     protected Random rd = new Random();
     public Map()
     {
-        Grid = new char[Dimensions[0], Dimensions[1]];
-        for (int i = 0; i < Dimensions[0]; i++)
-        {
-            for (int j = 0; j < Dimensions[1]; j++)
-            {
-                Grid[i, j] = '~';
-            }
-        }
         // this.PlaceIsland();
     }
 
@@ -47,17 +39,17 @@ public abstract class Map
     {
     }
 
-    public void Render()
+    public virtual void Render()
     {
-        for (int i = 0; i < Dimensions[0]; i++)
-        {
-            for (int j = 0; j < Dimensions[1]; j++)
-            {
-                Console.ForegroundColor = (Grid[i, j] == '#') ? ConsoleColor.Green : ((Grid[i, j] == 'O') ? ConsoleColor.Red : ConsoleColor.Blue);
-                Console.Write($" {Grid[i, j]} ");
-            }
-            Console.Write("\n");
-        }
+        // for (int i = 0; i < Dimensions[0]; i++)
+        // {
+        //     for (int j = 0; j < Dimensions[1]; j++)
+        //     {
+        //         Console.ForegroundColor = (Grid[i, j] == '#') ? ConsoleColor.Green : ((Grid[i, j] == 'O') ? ConsoleColor.Red : ConsoleColor.Blue);
+        //         Console.Write($" {Grid[i, j]} ");
+        //     }
+        //     Console.Write("\n");
+        // }
     }
 
 }

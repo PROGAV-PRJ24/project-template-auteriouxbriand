@@ -8,8 +8,8 @@ public abstract class Player
     public int pAttack { get; set; }
     public int PositionX { get; set; }
     public int PositionY { get; set; }
-    public List<Object> Inventaire {  get;  set;  }
-    public int capacity {  get; set;  }
+    public List<Object> Inventaire { get; set; }
+    public int capacity { get; set; }
     protected MoveManager Mover;
     public Map? CurrentMap { get; set; }
 
@@ -19,8 +19,9 @@ public abstract class Player
         {
             return Health > 0;
         }
-        set{
-            
+        set
+        {
+
         }
     }
 

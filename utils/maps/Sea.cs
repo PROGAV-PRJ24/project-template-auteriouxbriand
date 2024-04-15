@@ -1,9 +1,17 @@
 
 public class Sea : Map
 {
+    private int[] Dimensions = Config.Instance.SEA_MAP_SIZE;
     public Sea() : base()
     {
-
+        Grid = new char[Dimensions[0], Dimensions[1]];
+        for (int i = 0; i < Dimensions[0]; i++)
+        {
+            for (int j = 0; j < Dimensions[1]; j++)
+            {
+                Grid[i, j] = '~';
+            }
+        }
     }
 
     public void GenerateIslands()
@@ -41,6 +49,19 @@ public class Sea : Map
             currentY++;
         }
         Grid[currentX, currentY] = 'O';
+    }
+
+    public override void Render()
+    {
+        for (int i = 0; i < Dimensions[0]; i++)
+        {
+            for (int j = 0; j < Dimensions[1]; j++)
+            {
+                Console.ForegroundColor = (Grid[i, j] == '#') ? ConsoleColor.Green : ((Grid[i, j] == 'O') ? ConsoleColor.Red : ConsoleColor.Blue);
+                Console.Write($" {Grid[i, j]} ");
+            }
+            Console.Write("\n");
+        }
     }
 
 }

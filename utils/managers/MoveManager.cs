@@ -2,12 +2,12 @@ public class MoveManager
 {
     public void Jump(Player player, Map currentMap, int x, int y)
     {
-        if (x >= 0 && x < Config.Instance.MAP_SIZE[0] && y >= 0 && y < Config.Instance.MAP_SIZE[1])
+        if (x >= 0 && x < Config.Instance.LAND_MAP_SIZE[0] && y >= 0 && y < Config.Instance.LAND_MAP_SIZE[1])
         {
             player.PositionX = x;
             player.PositionY = y;
         }
-        currentMap.SetCurrentPosition(player, x,y);
+        currentMap.SetCurrentPosition(player, x, y);
 
     }
     public void Move(Player player, Map currentMap, int direction)
@@ -26,7 +26,7 @@ public class MoveManager
                 }
                 break;
             case 6:
-                if (player.PositionX == Config.Instance.MAP_SIZE[0] - 1)
+                if (player.PositionX == Config.Instance.LAND_MAP_SIZE[0] - 1)
                 {
                     player.PositionX--;
                     direction = 4;
@@ -37,7 +37,7 @@ public class MoveManager
                 }
                 break;
             case 2:
-                if (player.PositionY == Config.Instance.MAP_SIZE[1] - 1)
+                if (player.PositionY == Config.Instance.LAND_MAP_SIZE[1] - 1)
                 {
                     player.PositionY--;
                     direction = 8;

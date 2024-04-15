@@ -1,6 +1,7 @@
 public class Config
 {
-    public int[] MAP_SIZE { get; set; } = { 30, 30 };
+    public int[] SEA_MAP_SIZE { get; set; } = { 30, 30 };
+    public int[] LAND_MAP_SIZE { get; set; } = { 15, 15 };
 
     private static Config? instance = null;
     public static Config Instance
