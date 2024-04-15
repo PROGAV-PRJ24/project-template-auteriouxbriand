@@ -1,6 +1,5 @@
 public abstract class Map
 {
-    // protected int[] Dimensions = Config.Instance.MAP_SIZE;
     protected char[,] Grid { get; set; }
     protected Random rd = new Random();
     public Map()
@@ -27,7 +26,7 @@ public abstract class Map
 
     public void SetCurrentPosition(Player player, int x, int y)
     {
-        Grid[player.PositionX, player.PositionY] = 'x';
+        Grid[player.PositionX, player.PositionY] = player.Representer;
         Grid[x, y] = '~';
     }
 

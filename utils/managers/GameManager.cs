@@ -14,6 +14,13 @@ public class GameManager
         land.GenerateMountains();
         land.GenerateBoat();
         land.Render();
+        Pirate pirate = new Pirate("Joe", 5, land);
+        Console.WriteLine(pirate);
+        pirate.Move(8);
+        pirate.Move(5);
+        pirate.Move(5);
+        Console.WriteLine(pirate);
+        land.Render();
         // this.Rules();
     }
 

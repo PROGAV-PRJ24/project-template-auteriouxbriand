@@ -11,7 +11,7 @@ public abstract class Player
     public List<Object> Inventaire { get; set; }
     public int capacity { get; set; }
     protected MoveManager Mover;
-    public Map? CurrentMap { get; set; }
+    public Map CurrentMap { get; set; }
 
     public bool IsAlive
     {
@@ -25,17 +25,18 @@ public abstract class Player
         }
     }
 
-    public Player(string name, int level)
+    public Player(string name, int level, Map map)
     {
         Name = name;
         Level = level;
         Health = level * 10;
         Mana = level * 5;
         pAttack = level * 2;
-        PositionX = 15;
-        PositionY = 15;
+        PositionX = 1;
+        PositionY = 4;
         Inventaire = new List<Object>();
         Mover = new MoveManager();
+        CurrentMap = map;
     }
 
     public void LevelUp()
@@ -53,7 +54,7 @@ public abstract class Player
 
     public void Move(int direction)
     {
-        Mover.Move(this, CurrentMap, direction);
+        Mover.Move(this, direction);
     }
 
     public override string ToString()

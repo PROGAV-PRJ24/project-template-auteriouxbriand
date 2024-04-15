@@ -1,4 +1,4 @@
-public class Poulpe: Player
+public class Poulpe : Player
 {
     private int Tentacles { get; set; }
     private int Hearts { get; set; }
@@ -11,13 +11,13 @@ public class Poulpe: Player
         }
         set
         {
-            if(Hearts == 0)
+            if (Hearts == 0)
             {
                 IsAlive = false;
             }
             else
             {
-                if(value < Health)
+                if (value < Health)
                 {
                     Hearts--;
                 }
@@ -26,7 +26,7 @@ public class Poulpe: Player
         }
     }
 
-    public Poulpe(string name, int level) : base(name, level)
+    public Poulpe(string name, int level, Map currentMap) : base(name, level, currentMap)
     {
         Representer = 'J';
         Hearts = 3;

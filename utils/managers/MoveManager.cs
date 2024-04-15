@@ -10,7 +10,7 @@ public class MoveManager
         currentMap.SetCurrentPosition(player, x, y);
 
     }
-    public void Move(Player player, Map currentMap, int direction)
+    public void Move(Player player, int direction)
     {
         switch (direction)
         {
@@ -59,6 +59,6 @@ public class MoveManager
                 }
                 break;
         }
-        currentMap.SetCurrentPosition(player, player.PositionX, player.PositionY);
+        player.CurrentMap.SetCurrentPosition(player, player.PositionX, player.PositionY);
     }
 }

@@ -1,6 +1,6 @@
 public class Pirate : Player
 {
-    public Pirate(string name, int level) : base(name, level)
+    public Pirate(string name, int level, Map currentMap) : base(name, level, currentMap)
     {
         Representer = 'P';
     }

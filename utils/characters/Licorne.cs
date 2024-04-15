@@ -1,7 +1,7 @@
 public class Licorne : Player
 {
 
-    public Licorne(string name, int level) : base(name, level)
+    public Licorne(string name, int level, Map currentMap) : base(name, level, currentMap)
     {
         Representer = 'L';
     }
