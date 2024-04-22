@@ -37,9 +37,6 @@ public class GameManager
             land.Render();
 
         }
-
-
-
         // pirate.Move(5);
         // Console.WriteLine(pirate);
         // land.Render();
