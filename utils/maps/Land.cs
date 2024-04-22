@@ -4,12 +4,20 @@ public class Land : Map
     private List<Object>? Objects { get; set; }
     public Land() : base()
     {
+        InvisibleGrid = new char[Dimensions[0], Dimensions[1]];
+        for (int i = 0; i < Dimensions[0]; i++)
+        {
+            for (int j = 0; j < Dimensions[1]; j++)
+            {
+                InvisibleGrid[i, j] = '#';
+            }
+        }
         Grid = new char[Dimensions[0], Dimensions[1]];
         for (int i = 0; i < Dimensions[0]; i++)
         {
             for (int j = 0; j < Dimensions[1]; j++)
             {
-                Grid[i, j] = '#';
+                Grid[i, j] = InvisibleGrid[i, j];
             }
         }
     }
@@ -26,6 +34,8 @@ public class Land : Map
             {
                 Grid[x, y + i] = '^';
                 Grid[x, y - i] = '^';
+                InvisibleGrid[x, y + i] = '^';
+                InvisibleGrid[x, y - i] = '^';
             }
             x++;
         }
@@ -46,9 +56,11 @@ public class Land : Map
             for (int j = 0; j < 4; j++)
             {
                 Grid[i, j] = 'O';
+                InvisibleGrid[i, j] = 'O';
             }
         }
         Grid[1, 4] = 'O';
+        InvisibleGrid[1, 4] = 'O';
     }
 
     public void PlaceObjects()
@@ -62,11 +74,12 @@ public class Land : Map
         {
             for (int j = 0; j < Dimensions[1]; j++)
             {
-                Console.ForegroundColor = (Grid[i, j] == '^') ? ConsoleColor.DarkYellow : (Grid[i, j] == 'O') ? ConsoleColor.Red : ConsoleColor.Green;
+                Console.ForegroundColor = (Grid[i, j] == '^') ? ConsoleColor.DarkYellow : (Grid[i, j] == 'O') ? ConsoleColor.Red : (Grid[i, j] == '#') ? ConsoleColor.Green : ConsoleColor.DarkCyan;
                 Console.Write($" {Grid[i, j]} ");
             }
             Console.Write("\n");
         }
+        Console.WriteLine("---");
     }
 
 }

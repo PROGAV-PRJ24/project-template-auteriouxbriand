@@ -9,18 +9,30 @@ public class GameManager
         map.GenerateIslands();
         map.PlaceBoat();
         map.Render();
-        Console.WriteLine("----");
         Land land = new Land();
         land.GenerateMountains();
         land.GenerateBoat();
         land.Render();
+
         Pirate pirate = new Pirate("Joe", 5, land);
         Console.WriteLine(pirate);
-        pirate.Move(8);
-        pirate.Move(5);
-        pirate.Move(5);
-        Console.WriteLine(pirate);
+        land.SetCurrentPosition(pirate, 0);
         land.Render();
+        int direction;
+        for (int i = 0; i < 20; i++)
+        {
+            Console.WriteLine("Direction?");
+            direction = Convert.ToInt32(Console.ReadLine());
+            pirate.Move(direction);
+            land.Render();
+
+        }
+
+
+
+        // pirate.Move(5);
+        // Console.WriteLine(pirate);
+        // land.Render();
         // this.Rules();
     }
 
