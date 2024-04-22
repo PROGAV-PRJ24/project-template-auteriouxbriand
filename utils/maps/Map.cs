@@ -1,3 +1,5 @@
+using System.Security.Cryptography.X509Certificates;
+
 public abstract class Map
 {
     protected char[,] InvisibleGrid { get; set; }
@@ -43,11 +45,11 @@ public abstract class Map
                 Grid[player.PositionX, player.PositionY + 1] = InvisibleGrid[player.PositionX, player.PositionY + 1];
                 break;
         }
-
     }
 
-    private void PlaceObjects(List<Object> objects)
+    public void PlaceObject(Object obj)
     {
+        Grid[obj.PositionX, obj.PositionY] = obj.Representer;
     }
 
     private void PlaceBoat()

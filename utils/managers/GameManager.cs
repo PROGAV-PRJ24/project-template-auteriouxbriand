@@ -18,6 +18,16 @@ public class GameManager
         Console.WriteLine(pirate);
         land.SetCurrentPosition(pirate, 0);
         land.Render();
+
+        Apple apple1 = new Apple(land);
+        Apple apple2 = new Apple(land);
+
+        land.PlaceObject(apple1);
+        land.PlaceObject(apple2);
+
+        land.Render();
+
+
         int direction;
         for (int i = 0; i < 20; i++)
         {
