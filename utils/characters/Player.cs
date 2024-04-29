@@ -1,11 +1,11 @@
 public abstract class Player
 {
-    public char Representer { get; set; }
     public string Name { get; set; }
+    public char Representer { get; set; }
     public int Level { get; set; }
     public int Health { get; set; }
     public int Mana { get; set; }
-    public int pAttack { get; set; }
+    public int Damage { get; set; }
     public int PositionX { get; set; }
     public int PositionY { get; set; }
     public List<Object> Inventaire { get; set; }
@@ -31,7 +31,7 @@ public abstract class Player
         Level = level;
         Health = level * 10;
         Mana = level * 5;
-        pAttack = level * 2;
+        Damage = level * 2;
         PositionX = 1;
         PositionY = 4;
         Inventaire = new List<Object>();
@@ -44,12 +44,12 @@ public abstract class Player
         Level++;
         Health += 10;
         Mana += 5;
-        pAttack += 2;
+        Damage += 2;
     }
 
     public void Attack(Player target)
     {
-        target.Health -= pAttack;
+        target.Health -= Damage;
     }
 
     public void Move(int direction)
@@ -59,7 +59,7 @@ public abstract class Player
 
     public override string ToString()
     {
-        return "Name: " + Name + "\nLevel: " + Level + "\nHealth: " + Health + "\nMana: " + Mana + "\nAttack: " + pAttack + "\nPosition: " + PositionX + ", " + PositionY;
+        return "-  -  -  -  -  -  -  -  -  -  -  -  -  -  - \n" + "Name: " + Name + "\nLevel: " + Level + "\nHealth: " + Health + "\nMana: " + Mana + "\nAttack: " + Damage + "\nPosition: " + PositionX + ", " + PositionY + "\n -  -  -  -  -  -  -  -  -  -  -  -  -  -  -";
     }
 
 }

@@ -17,13 +17,12 @@ public class MoveManager
             case 8:
                 if (player.PositionX == Config.Instance.LAND_MAP_SIZE[0] - 1)
                 {
-                    player.PositionX--;
+                    player.PositionX++;
                     direction = 2;
-                    player.CurrentMap.SetCurrentPosition(player, direction);
                 }
                 else
                 {
-                    player.PositionX++;
+                    player.PositionX--;
                     player.CurrentMap.SetCurrentPosition(player, direction);
 
                 }
@@ -33,7 +32,7 @@ public class MoveManager
                 {
                     player.PositionY--;
                     direction = 4;
-                    player.CurrentMap.SetCurrentPosition(player, direction);
+
 
                 }
                 else
@@ -48,7 +47,6 @@ public class MoveManager
                 {
                     player.PositionX++;
                     direction = 8;
-                    player.CurrentMap.SetCurrentPosition(player, direction);
 
                 }
                 else
@@ -63,7 +61,6 @@ public class MoveManager
                 {
                     player.PositionY++;
                     direction = 6;
-                    player.CurrentMap.SetCurrentPosition(player, direction);
 
                 }
                 else

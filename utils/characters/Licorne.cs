@@ -8,12 +8,12 @@ public class Licorne : Player
 
     public void Heal(Player target)
     {
-        target.Health += pAttack / 2;
+        target.Health += Damage / 2;
     }
 
     public void Buff(Player target)
     {
-        target.pAttack += pAttack / 2;
+        target.Damage += Damage / 2;
     }
     public void Jump(int x, int y)
     {

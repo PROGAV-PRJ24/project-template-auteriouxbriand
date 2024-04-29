@@ -8,7 +8,7 @@ public class Pirate : Player
     new public void Attack(Player target)
     {
         base.Attack(target);
-        Health += pAttack / 10;
+        Health += Damage / 10;
     }
 
     public void Steal(Player target)
