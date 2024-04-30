@@ -8,33 +8,40 @@ public class GameManager
         Sea sea = new Sea();
         sea.GenerateIslands();
         sea.PlaceBoat();
-        // sea.Render();
+        sea.Render();
 
+        Console.WriteLine("Land map generating");
         Land land = new Land();
         land.GenerateMountains();
         land.GenerateBoat();
-        // land.Render();
+        land.Render();
 
+        Console.WriteLine("Pirate generating");
         Pirate pirate = new Pirate("Joe", 5, land);
         Console.WriteLine(pirate);
         land.SetCurrentPosition(pirate, 0);
-        // land.Render();
+        land.Render();
 
+        Console.WriteLine("Monster generating");
+        Monster monster = new Monster(land);
+        land.PlaceMonster(monster, 0);
+        land.Render();
+
+        Console.WriteLine("Apples generating");
         Apple apple1 = new Apple(land);
         Apple apple2 = new Apple(land);
-
         land.PlaceObject(apple1);
         land.PlaceObject(apple2);
-
-        // land.Render();
+        land.Render();
 
 
         int direction;
         for (int i = 0; i < 20; i++)
         {
             direction = Convert.ToInt32(Console.ReadLine());
+            monster.Move();
             pirate.Move(direction);
-            Console.Clear();
+            // Console.Clear();
             land.Render();
             Console.WriteLine(pirate);
 

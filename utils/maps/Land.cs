@@ -74,7 +74,7 @@ public class Land : Map
         {
             for (int j = 0; j < Dimensions[1]; j++)
             {
-                Console.ForegroundColor = (Grid[i, j] == '^') ? ConsoleColor.DarkYellow : (Grid[i, j] == 'O') ? ConsoleColor.Red : (Grid[i, j] == '#') ? ConsoleColor.Green : ConsoleColor.DarkCyan;
+                Console.ForegroundColor = (Grid[i, j] == '^') ? ConsoleColor.DarkYellow : (Grid[i, j] == 'O' || Grid[i, j] == 'M') ? ConsoleColor.Red : (Grid[i, j] == '#') ? ConsoleColor.Green : (Grid[i, j] == 'o') ? ConsoleColor.DarkMagenta : ConsoleColor.DarkCyan;
                 Console.Write($" {Grid[i, j]} ");
             }
             Console.Write("\n");

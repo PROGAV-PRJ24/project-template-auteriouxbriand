@@ -29,6 +29,26 @@ public abstract class Map
         Grid[obj.PositionX, obj.PositionY] = obj.Representer;
     }
 
+    public void PlaceMonster(Monster monster, int direction)
+    {
+        Grid[monster.PositionX, monster.PositionY] = monster.Representeur;
+        switch (direction)
+        {
+            case 8:
+                Grid[monster.PositionX + 1, monster.PositionY] = InvisibleGrid[monster.PositionX + 1, monster.PositionY];
+                break;
+            case 6:
+                Grid[monster.PositionX, monster.PositionY - 1] = InvisibleGrid[monster.PositionX, monster.PositionY - 1];
+                break;
+            case 2:
+                Grid[monster.PositionX - 1, monster.PositionY] = InvisibleGrid[monster.PositionX - 1, monster.PositionY];
+                break;
+            case 4:
+                Grid[monster.PositionX, monster.PositionY + 1] = InvisibleGrid[monster.PositionX, monster.PositionY + 1];
+                break;
+        }
+    }
+
     public virtual void PlaceBoat() { }
 
     public virtual void Render() { }
