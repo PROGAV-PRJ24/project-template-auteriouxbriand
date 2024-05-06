@@ -117,7 +117,7 @@ public class Island : Map
                         else
                         {
                             Console.BackgroundColor = Grid[i, j] == '.' ? ConsoleColor.Blue : (Grid[i, j] == '#' ? ConsoleColor.Yellow : ConsoleColor.Black);
-                            Console.Write(" " + "〜" + " "); // Affiche la carte
+                            Console.Write(" " + Grid[i, j] + " "); // Affiche la carte
                             Console.ResetColor();
                         }
                     }

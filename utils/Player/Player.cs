@@ -1,5 +1,3 @@
-using System.Runtime.InteropServices;
-using System.Security.AccessControl;
 
 public class Player
 {
@@ -109,7 +107,15 @@ public class Player
     }
     public void Drop(Island map)
     {
-        if (Inventory.Count > 0)
+        if (Inventory.Count < 0)
+        {
+            Message = "Votre inventaire est vide";
+        }
+        else if (map.Grid[PositionX, PositionY] != 'b')
+        {
+            Message = "Vous ne pouvez pas déposer d'objet ici";
+        }
+
         {
             foreach (var item in Inventory)
             {
@@ -117,10 +123,6 @@ public class Player
             }
             Inventory.Clear();
             Message = "Vous avez déposé votre inventaire dans le coffre";
-        }
-        else
-        {
-            Message = "Votre inventaire est vide";
         }
     }
     public void Dig(Island map)
