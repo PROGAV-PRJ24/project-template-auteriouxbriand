@@ -1,39 +1,52 @@
-using System.Security.Cryptography.X509Certificates;
-
 public class Game
 {
     private bool state = true; // Booléen pour savoir si le jeu est en cours
-                               // Création de la carte
-    public Player Player1 { get; set; }
-    public Player Player2 { get; set; }
-    public IslandView CurrentMap { get; set; }
+    public List<Player> Players { get; set; }
+    public List<Monster> Monsters { get; set; }
+    public Island CurrentMap { get; set; }
     public Game()
-    {  
+    {
+        // Init actors of the game
+        Players = new List<Player>();
+        Monsters = new List<Monster>();
+        CurrentMap = new Island();
+
+        // Local definitions for the game
+        int tourNumber = 0;
+        Player currentUser;
+
+        // Game initialization
         this.Initialize();
-        
+
+        // Game loop
         while (state)
-        {   
-            this.Tour();
+        {
+            currentUser = Players![tourNumber % Players.Count];
+            this.Tour(currentUser);
+            tourNumber++;
         }
     }
 
     private void Initialize()
     {
-        CurrentMap = new IslandView();
-        this.Player1 = new Player("Joueur 1", 1, CurrentMap);
-        
+        // Ajout des joueurs et des monstres
+        Players.Add(new Player("Joueur 1", 1, CurrentMap));
+        Players.Add(new Player("Joueur 2", 1, CurrentMap));
+
+        Monsters.Add(new Monster("Monstre 1", CurrentMap));
+
+        // Ajout des trésors
         for (int i = 0; i < 10; i++)
         {
             CurrentMap.AddObject(new Object('X', "Trésor"));
         }
-        
+
     }
 
-    private void Tour()
-    {  
-        CurrentMap.Render(Player1); // Affichage de la carte
-        Player1.DisplayUserState(); // Affichage de l'état du joueur
-        
+    private void Tour(Player player)
+    {
+        CurrentMap.Render(Players, Monsters); // Affichage de la carte
+
         ConsoleKeyInfo keyInfo = Console.ReadKey(); // Lecture de la direction de déplacement
 
         Console.Clear(); // Efface la console avant d'afficher la carte mise à jour
@@ -41,32 +54,51 @@ public class Game
         switch (keyInfo.Key)
         {
             case ConsoleKey.Q:
-                Player1.Move(0, -1, CurrentMap); // Déplacement vers le haut
+                player.Move(0, -1, CurrentMap); // Déplacement vers le haut
                 break;
             case ConsoleKey.D:
-                Player1.Move(0, 1, CurrentMap); // Déplacement vers le bas
+                player.Move(0, 1, CurrentMap); // Déplacement vers le bas
                 break;
             case ConsoleKey.Z:
-                Player1.Move(-1, 0, CurrentMap); // Déplacement vers la gauche
+                player.Move(-1, 0, CurrentMap); // Déplacement vers la gauche
                 break;
             case ConsoleKey.S:
-                Player1.Move(1, 0, CurrentMap); // Déplacement vers la droite
+                player.Move(1, 0, CurrentMap); // Déplacement vers la droite
+                break;
+            case ConsoleKey.LeftArrow:
+                player.Move(0, -1, CurrentMap); // Déplacement vers le haut
+                break;
+            case ConsoleKey.RightArrow:
+                player.Move(0, 1, CurrentMap); // Déplacement vers le bas
+                break;
+            case ConsoleKey.UpArrow:
+                player.Move(-1, 0, CurrentMap); // Déplacement vers la gauche
+                break;
+            case ConsoleKey.DownArrow:
+                player.Move(1, 0, CurrentMap); // Déplacement vers la droite
                 break;
             case ConsoleKey.Enter:
-                Player1.Dig(CurrentMap); // Creuser
+                player.Dig(CurrentMap); // Creuser
                 break;
             case ConsoleKey.Escape:
                 this.Pause(); // Mettre en pause le jeu
                 break;
+            case ConsoleKey.Spacebar:
+                player.Drop(CurrentMap); // Lâcher un objet
+                break;
+            case ConsoleKey.A:
+                Console.WriteLine("Attaque");
+                // Player1.Attack(Player2); // Attaquer le joueur
+                break;
+
         }
-
-        
-
+        // Monster1.Move(CurrentMap);
+        player.DisplayUserState();
     }
 
     public void Pause()
     {
-        Console.WriteLine("Appuyez sur une touche pour continuer... Appuyez sur Echap pour quitter.");
+        Console.WriteLine("-----Appuyez sur une touche pour continuer... Appuyez sur Echap pour quitter.-----");
         if (Console.ReadKey().Key == ConsoleKey.Escape)
             Environment.Exit(0);
     }

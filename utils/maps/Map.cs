@@ -2,7 +2,7 @@
 
 public abstract class Map
 {
-    protected int[] Dimensions { get; set;}
+    protected int[] Dimensions { get; set; }
     public int Width { get; set; }
     public int Height { get; set; }
     public char[,] Grid { get; set; }
@@ -10,7 +10,8 @@ public abstract class Map
 
     public Map() { }
 
-    public void BuildBoat() {
+    public void BuildBoat()
+    {
         int startX = 0;
         int startY = 0;
 
@@ -21,18 +22,8 @@ public abstract class Map
                 Grid[startX + i, startY + j] = 'b';
             }
         }
-        for (int i = 3; i > 0; i--)
-        {
-            // Dessiner les #
-            for (int k = 0; k < i * 2 - 1; k++)
-            {
-                Grid[i,k] = '_';
-            }
-        }
-        
-
     }
 
-    public virtual void Render(Player player) {}
+    public virtual void Render(List<Player> players, List<Monster> monster) { }
 
 }

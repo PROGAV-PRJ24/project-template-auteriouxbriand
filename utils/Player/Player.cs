@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 
 public class Player
@@ -15,11 +16,14 @@ public class Player
 
     public int DiggedValue { get; set; }
 
+    public int Score { get; set; }
 
     public int PositionX { get; private set; }
     public int PositionY { get; private set; }
 
     public List<Object> Inventory { get; set; }
+
+    public List<Object> Chest { get; set; }
 
     public string Message { get; set; }
 
@@ -49,6 +53,7 @@ public class Player
         Protection = 0;
         Damage = level * 2;
         Inventory = new List<Object>();
+        Chest = new List<Object>();
 
     }
 
@@ -81,10 +86,44 @@ public class Player
 
     public void Attack(Player target)
     {
-        target.Health -= Damage;
+        if (target.PositionX == this.PositionX + 1 || target.PositionX == this.PositionX - 1 || target.PositionY == this.PositionY + 1 || target.PositionY == this.PositionY - 1)
+        {
+            target.Health -= Damage;
+            Message = "Vous avez attaqué enlevé " + Damage + " points de vie à " + target.Name;
+        }
+        else
+        {
+            Message = "La cible est trop loin pour être attaquée";
+        }
     }
-
-    public void Dig(IslandView map)
+    public void Attack(Monster monster)
+    {
+        if (monster.PositionX == this.PositionX + 1 || monster.PositionX == this.PositionX - 1 || monster.PositionY == this.PositionY + 1 || monster.PositionY == this.PositionY - 1)
+        {
+            monster.Health -= Damage;
+        }
+        else
+        {
+            Message = "La cible est trop loin pour être attaquée";
+        }
+    }
+    public void Drop(Island map)
+    {
+        if (Inventory.Count > 0)
+        {
+            foreach (var item in Inventory)
+            {
+                this.Chest.Add(item);
+            }
+            Inventory.Clear();
+            Message = "Vous avez déposé votre inventaire dans le coffre";
+        }
+        else
+        {
+            Message = "Votre inventaire est vide";
+        }
+    }
+    public void Dig(Island map)
     {
         if (Energy <= 0)
         {
@@ -98,7 +137,7 @@ public class Player
             Energy -= 0.05;
             if (DiggedValue == map.Objects[PositionX, PositionY].Depth)
             {
-                if(Inventory.Count < 3)
+                if (Inventory.Count < 3)
                 {
                     Inventory.Add(map.Objects[PositionX, PositionY]);
                     Message = "Vous avez trouvé l'objet: " + map.Objects[PositionX, PositionY];
@@ -136,7 +175,7 @@ public class Player
             PositionY = newY;
             if (map.Grid[newX, newY] != '#')
             {
-                Energy -= 0.5;
+                Energy -= 0.05;
             }
         }
         DiggedValue = 0;
@@ -148,18 +187,18 @@ public class Player
         Console.WriteLine(new string('-', 90));
 
         if (Message != "")
-        {   
+        {
 
-                Console.WriteLine("Info :  " + Message);
-                Console.WriteLine(new string('-', 90));
-                Message="";
+            Console.WriteLine("Info :  " + Message);
+            Console.WriteLine(new string('-', 90));
+            Message = "";
         }
 
         Console.WriteLine("Joueur: " + Name);
         Console.WriteLine("Niveau: " + Level);
         Console.WriteLine("Santé: " + Health);
         Console.WriteLine("Mana: " + Mana);
-        Console.WriteLine("Energie: " + Energy);
+        Console.WriteLine("Energie: " + Math.Round(Energy));
 
 
         Console.Write("Inventaire: : ");
