@@ -132,24 +132,28 @@ public class Player
             Message = "Vous n'avez plus d'énergie pour creuser";
             return;
         }
-        if (map.Objects[PositionX, PositionY] != null && map.Objects[PositionX, PositionY].state == true)
+        if (map.Tresors[PositionX, PositionY] != null && map.Tresors[PositionX, PositionY].state == true)
         {
             Message = "Vous creusez à la profondeur: " + DiggedValue;
             DiggedValue += 1;
             Energy -= 0.05;
-            if (DiggedValue == map.Objects[PositionX, PositionY].Depth)
+            if (DiggedValue == map.Tresors[PositionX, PositionY].Depth)
             {
-                if (Inventory.Count < 3)
+                foreach (var item in map.Tresors[PositionX, PositionY].Objects)
                 {
-                    Inventory.Add(map.Objects[PositionX, PositionY]);
-                    Message = "Vous avez trouvé l'objet: " + map.Objects[PositionX, PositionY];
+                    if (Inventory.Count < 3)
+                    {
+                        Inventory.Add(item);
+                        Message = "Vous avez trouvé l'objet: " + item;
+                    }
+                    else
+                    {
+                        Message = "Votre inventaire est plein, vous ne pouvez pas ramasser l'objet: " + item + ". Il reste en surface. Videz votre inventaire sur le bateau.";
+                        //item.Depth = 0; je sais pas comment faire ici
+                    }
                 }
-                else
-                {
-                    Message = "Votre inventaire est plein, vous ne pouvez pas ramasser l'objet: " + map.Objects[PositionX, PositionY] + ". Il reste en surface. Videz votre inventaire sur le bateau.";
-                    map.Objects[PositionX, PositionY].Depth = 0;
-                }
-                map.RemoveObject(PositionX, PositionY);
+
+                map.RemoveTresor(PositionX, PositionY);
                 DiggedValue = 0;
             }
 

@@ -1,6 +1,6 @@
 public class Island : Map
 {
-    public Object[,] Objects { get; set; }
+    public Tresor[,] Tresors { get; set; }
 
     public Island() : base()
     {
@@ -11,7 +11,7 @@ public class Island : Map
 
         // Grid definition
         this.Grid = new char[Height, Width];
-        this.Objects = new Object[Height, Width];
+        this.Tresors = new Tresor[Height, Width];
 
         // Filling map with empty cells
         for (int i = 0; i < Height; i++)
@@ -50,7 +50,7 @@ public class Island : Map
         }
     }
 
-    public void AddObject(Object obj)
+    public void AddObject(Tresor trez)
     {
         int x, y;
         do
@@ -60,12 +60,12 @@ public class Island : Map
         }
         while (Grid[x, y] == '.' || Grid[x, y] == 'b');
 
-        Objects[x, y] = obj;
+        Tresors[x, y] = trez;
     }
 
-    public void RemoveObject(int x, int y)
+    public void RemoveTresor(int x, int y)
     {
-        Objects[x, y].state = false;
+        Tresors[x, y].state = false;
     }
 
     public override void Render(List<Player> players, List<Monster> monsters)
@@ -108,7 +108,7 @@ public class Island : Map
                             Console.Write(" + ");
                             Console.ResetColor();
                         }
-                        else if (Objects[i, j] != null && Objects[i, j].state)
+                        else if (Tresors[i, j] != null && Tresors[i, j].state)
                         {
                             Console.BackgroundColor = ConsoleColor.Green;
                             Console.Write(" X ");

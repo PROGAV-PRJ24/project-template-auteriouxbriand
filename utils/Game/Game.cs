@@ -4,6 +4,7 @@ public class Game
     public List<Player> Players { get; set; }
     public List<Monster> Monsters { get; set; }
     public Island CurrentMap { get; set; }
+
     public Game()
     {
         // Init actors of the game
@@ -35,12 +36,23 @@ public class Game
 
         Monsters.Add(new Monster("Monstre 1", CurrentMap));
 
-        // Ajout des trésors
-        for (int i = 0; i < 10; i++)
+        // Ajout des trésors avec des matcha froids (bonus)
+        for (int i = 0; i < 5; i++)
         {
-            CurrentMap.AddObject(new Object('X', "Trésor"));
+            List<Object> objects = new List<Object>();
+            objects.Add(new ColdMatcha());
+            objects.Add(new GoldTicket());
+            CurrentMap.AddObject(new Tresor(objects));
         }
 
+        // Ajout des trésors avec des matcha chauds (malus)
+        for (int i = 0; i < 5; i++)
+        {
+            List<Object> objects = new List<Object>();
+            objects.Add(new HotMatcha());
+            objects.Add(new GoldTicket());
+            CurrentMap.AddObject(new Tresor(objects));
+        }
     }
 
     private void Tour(Player player)
