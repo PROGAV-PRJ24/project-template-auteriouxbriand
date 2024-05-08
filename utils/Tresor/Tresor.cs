@@ -6,7 +6,7 @@ public class Tresor
     public char Symbol { get; set; }
     public int Depth { get; set; }
     public bool state = true; // Booléen pour savoir si le tresor est en jeu
-    public List<Object> Objects { get; set; }
+    public List<Object?> Objects { get; set; }
     protected static Random rd = new Random();
     public Tresor(List<Object> objects, char symb = 'X', string name = "Trésor")
     {

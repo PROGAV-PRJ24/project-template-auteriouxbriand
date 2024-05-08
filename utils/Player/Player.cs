@@ -139,21 +139,71 @@ public class Player
             Energy -= 0.05;
             if (DiggedValue == map.Tresors[PositionX, PositionY].Depth)
             {
+                int n = 0;
+                List<Object> rest = new List<Object>(); //stockage des items qui ne rentrent pas dans l'inventaire
+                List<Object> found = new List<Object>(); //stockage des items qui vont dans l'inventaire
                 foreach (var item in map.Tresors[PositionX, PositionY].Objects)
                 {
-                    if (Inventory.Count < 3)
+                    if (item != null)
                     {
-                        Inventory.Add(item);
-                        Message = "Vous avez trouvé l'objet: " + item;
+                        if (Inventory.Count < 5)
+                        {
+                            Inventory.Add(item);
+                            found.Add(item);
+                            // map.Tresors[PositionX, PositionY].Objects[n] = null;
+                            // Message = "Vous avez trouvé l'objet: " + item;
+                        }
+                        else
+                        {
+                            // Message = "Votre inventaire est plein, vous ne pouvez pas ramasser l'objet: " + item + ". Il reste en surface. Videz votre inventaire sur le bateau.";
+                            rest.Add(item);
+                            map.Tresors[PositionX, PositionY].Depth = 0;
+                        }
+                        n++;
                     }
+
                     else
                     {
-                        Message = "Votre inventaire est plein, vous ne pouvez pas ramasser l'objet: " + item + ". Il reste en surface. Videz votre inventaire sur le bateau.";
-                        //item.Depth = 0; je sais pas comment faire ici
+                        n++;
                     }
                 }
+                if (rest.Count() == 0) //si tous les objets sont rentrés dans l'inventaire
+                {
+                    string msg = "";
+                    foreach (var item in found)
+                    {
+                        msg = msg + item + ", ";
+                        map.Tresors[PositionX, PositionY].Objects.Remove(item);
+                    }
+                    Message = "Vous avez trouvé les objets : " + msg;
+                    map.RemoveTresor(PositionX, PositionY);
+                }
+                else if (found.Count() == 0) //si aucun objet est rentré dans l'inventaire
+                {
+                    string msg = "";
+                    foreach (var item in rest)
+                    {
+                        msg = msg + item + ", ";
+                    }
+                    Message = "Votre inventaire est plein, vous ne pouvez pas ramasser les objets : " + msg;
+                }
+                else
+                {
+                    string msg1 = "";
+                    string msg2 = "";
+                    foreach (var item in found)
+                    {
+                        msg1 = msg1 + item + ", ";
+                        map.Tresors[PositionX, PositionY].Objects.Remove(item);
 
-                map.RemoveTresor(PositionX, PositionY);
+                    }
+                    foreach (var item in rest)
+                    {
+                        msg2 = msg2 + item + ", ";
+                    }
+                    Message = "Vous avez trouver : " + msg1 + "\n Cependant votre inventaire est plein, vous ne pouvez pas ramasser : " + msg2 + "\n Videz votre inventaire sur le bateau, les objets restent en surface.";
+
+                }
                 DiggedValue = 0;
             }
 
