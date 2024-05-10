@@ -132,17 +132,17 @@ public class Player
             Message = "Vous n'avez plus d'énergie pour creuser";
             return;
         }
-        if (map.Tresors[PositionX, PositionY] != null && map.Tresors[PositionX, PositionY].state == true)
+        if (map.Objects[PositionX][PositionY] != null && map.Objects[PositionX][PositionY].state == true)
         {
             Message = "Vous creusez à la profondeur: " + DiggedValue;
             DiggedValue += 1;
             Energy -= 0.05;
-            if (DiggedValue == map.Tresors[PositionX, PositionY].Depth)
+            if (DiggedValue == map.Objects[PositionX][PositionY].Depth)
             {
-                int n = 0;
+
                 List<Object> rest = new List<Object>(); //stockage des items qui ne rentrent pas dans l'inventaire
                 List<Object> found = new List<Object>(); //stockage des items qui vont dans l'inventaire
-                foreach (var item in map.Tresors[PositionX, PositionY].Objects)
+                foreach (var item in map.Objects[PositionX][PositionY].Loot())
                 {
                     if (item != null)
                     {
@@ -150,21 +150,14 @@ public class Player
                         {
                             Inventory.Add(item);
                             found.Add(item);
-                            // map.Tresors[PositionX, PositionY].Objects[n] = null;
-                            // Message = "Vous avez trouvé l'objet: " + item;
+                            map.RemoveObject(PositionX, PositionY);
                         }
                         else
                         {
-                            // Message = "Votre inventaire est plein, vous ne pouvez pas ramasser l'objet: " + item + ". Il reste en surface. Videz votre inventaire sur le bateau.";
                             rest.Add(item);
-                            map.Tresors[PositionX, PositionY].Depth = 0;
+                            map.Objects[PositionX][PositionY].Depth = 0;
                         }
-                        n++;
-                    }
 
-                    else
-                    {
-                        n++;
                     }
                 }
                 if (rest.Count() == 0) //si tous les objets sont rentrés dans l'inventaire
@@ -173,10 +166,8 @@ public class Player
                     foreach (var item in found)
                     {
                         msg = msg + item + ", ";
-                        map.Tresors[PositionX, PositionY].Objects.Remove(item);
                     }
                     Message = "Vous avez trouvé les objets : " + msg;
-                    map.RemoveTresor(PositionX, PositionY);
                 }
                 else if (found.Count() == 0) //si aucun objet est rentré dans l'inventaire
                 {
@@ -194,7 +185,7 @@ public class Player
                     foreach (var item in found)
                     {
                         msg1 = msg1 + item + ", ";
-                        map.Tresors[PositionX, PositionY].Objects.Remove(item);
+                        map.RemoveObject(PositionX, PositionY);
 
                     }
                     foreach (var item in rest)

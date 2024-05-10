@@ -1,14 +1,17 @@
 public class GoldTicket : Object
 {
-    public int Value { get; private set; }
 
+    public GoldTicket() : base('X', "GoldTicket")
+    {
+        this.Gain = rd.Next(1, 10);
+    }
     public GoldTicket(char symb = 'X', string name = "GoldTicket")
     : base(symb, name)
     {
-        Value = rd.Next(1, 10);
+        this.Gain = rd.Next(1, 10);
     }
     public override string ToString()
     {
-        return $"Ticket d'or qui vaut super cher";
+        return $"Ticket d'or qui vaut super cher et qui met bien";
     }
 }

@@ -36,22 +36,9 @@ public class Game
 
         Monsters.Add(new Monster("Monstre 1", CurrentMap));
 
-        // Ajout des trésors avec des matcha froids (bonus)
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 10; i++)
         {
-            List<Object> objects = new List<Object>();
-            objects.Add(new ColdMatcha());
-            objects.Add(new GoldTicket());
-            CurrentMap.AddObject(new Tresor(objects));
-        }
-
-        // Ajout des trésors avec des matcha chauds (malus)
-        for (int i = 0; i < 5; i++)
-        {
-            List<Object> objects = new List<Object>();
-            objects.Add(new HotMatcha());
-            objects.Add(new GoldTicket());
-            CurrentMap.AddObject(new Tresor(objects));
+            CurrentMap.AddObject();
         }
     }
 

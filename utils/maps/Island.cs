@@ -1,6 +1,7 @@
 public class Island : Map
 {
-    public Tresor[,] Tresors { get; set; }
+    Randomizer Rand = new Randomizer();
+    public List<List<Object>> Objects { get; set; }
 
     public Island() : base()
     {
@@ -11,7 +12,16 @@ public class Island : Map
 
         // Grid definition
         this.Grid = new char[Height, Width];
-        this.Tresors = new Tresor[Height, Width];
+        this.Objects = new List<List<Object>>();
+        for (int i = 0; i < Height; i++)
+        {
+            List<Object> row = new List<Object>();
+            for (int j = 0; j < Width; j++)
+            {
+                row.Add(null!);
+            }
+            Objects.Add(row);
+        }
 
         // Filling map with empty cells
         for (int i = 0; i < Height; i++)
@@ -50,7 +60,7 @@ public class Island : Map
         }
     }
 
-    public void AddObject(Tresor trez)
+    public void AddObject()
     {
         int x, y;
         do
@@ -59,13 +69,13 @@ public class Island : Map
             y = rd.Next(0, Height);
         }
         while (Grid[x, y] == '.' || Grid[x, y] == 'b');
-
-        Tresors[x, y] = trez;
+        Objects[x][y] = Rand.Object();
     }
 
-    public void RemoveTresor(int x, int y)
+    public void RemoveObject(int x, int y)
     {
-        Tresors[x, y].state = false;
+        if (Objects[x][y] != null)
+            Objects[x][y].state = false;
     }
 
     public override void Render(List<Player> players, List<Monster> monsters)
@@ -108,7 +118,7 @@ public class Island : Map
                             Console.Write(" + ");
                             Console.ResetColor();
                         }
-                        else if (Tresors[i, j] != null && Tresors[i, j].state)
+                        else if (Objects[i][j] != null && Objects[i][j].state)
                         {
                             Console.BackgroundColor = ConsoleColor.Green;
                             Console.Write(" X ");

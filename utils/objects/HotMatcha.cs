@@ -1,11 +1,13 @@
 public class HotMatcha : Object
 {
-    public int Damage { get; set; }
-
-    public HotMatcha(char symb = 'U', string name = "HotMatchaLatte", int damage = 1)
+    public HotMatcha() : base('U', "HotMatchaLatte")
+    {
+        Gain = -40 / 100;
+    }
+    public HotMatcha(char symb = 'U', string name = "HotMatchaLatte", int temperature = 40)
     : base(symb, name)
     {
-        Damage = damage;
+        Gain = -temperature / 100;
     }
 
     public override string ToString()

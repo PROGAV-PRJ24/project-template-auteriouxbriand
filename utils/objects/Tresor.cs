@@ -1,0 +1,35 @@
+public class Tresor : Object
+{
+    Randomizer Rand = new Randomizer();
+    protected enum TypeObject
+    {
+        ColdMatcha,
+        HotMatcha,
+        GoldTicket,
+        Potion
+    }
+    public List<Object> Loots { get; set; } = new List<Object>();
+
+    public Tresor() : base('T', "Tresor")
+    {
+        GenerateLoots();
+    }
+    public Tresor(char symb = 'T', string name = "Trésor") : base(symb, name)
+    {
+        GenerateLoots();
+    }
+    private void GenerateLoots()
+    {
+        int nbLoots = rd.Next(1, 4);
+        for (int i = 0; i < nbLoots; i++)
+        {
+            Loots.Add(Rand.Object());
+        }
+    }
+
+    new public List<Object> Loot()
+    {
+        return Loots;
+    }
+
+}

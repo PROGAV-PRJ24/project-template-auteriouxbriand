@@ -1,10 +1,13 @@
 public class ColdMatcha : Object
 {
-    public int Gain { get; set; }
-    public ColdMatcha(char symb = 'U', string name = "ColdMatchaLatte", int gain = 1)
-    : base(symb, name)
+    public ColdMatcha() : base('U', "ColdMatchaLatte")
     {
-        Gain = gain;
+        Gain = 10;
+    }
+    public ColdMatcha(char symb = 'U', string name = "ColdMatchaLatte")
+            : base(symb, name)
+    {
+        Gain = 10;
     }
     public override string ToString()
     {
