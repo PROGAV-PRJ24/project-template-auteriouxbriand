@@ -1,68 +1,66 @@
-public class Monster
+public class Monster : Entity
 {
-    public string Name { get; set; }
-    public char Symbol { get; set; }
+    private double _health;
     public int Level { get; set; }
-    public int Health { get; set; }
-    public int Damage { get; set; }
+    public double Health
+    {
+        get => _health;
+        set
+        {
+            _health = value;
+            if (_health < 1)
+            {
+                IsAlive = false;
 
-    public int PositionX { get; private set; }
-    public int PositionY { get; private set; }
+            }
+        }
+    }
 
-    private static Random rd = new Random();
-
+    private bool _isAlive;
     public bool IsAlive
     {
         get
         {
-            return Health > 0;
+            if (Health < 1)
+            {
+                return false;
+            }
+            return true;
         }
         set
         {
-
+            _isAlive = value;
         }
     }
 
-    public Monster(string name, Island map, int level = 1, int x = 0, int y = 0)
+    public Monster(string name, Island map, int level = 1, int x = 0, int y = 0) : base(name, map)
     {
-        Name = name;
         Level = level;
         Health = level * 10;
         Damage = level * 2;
         Spawn(map);
     }
 
-    private void Spawn(Map map)
+    public string Attack(Player player)
     {
-        Random rand = new Random();
-        int x = rand.Next(0, map.Width);
-        int y = rand.Next(0, map.Height);
-
-        while (map.Grid[x, y] != '#')
+        if (player.PositionX == PositionX && player.PositionY == PositionY)
         {
-            x = rand.Next(0, map.Width);
-            y = rand.Next(0, map.Height);
+            player.Health -= Damage;
+            return $"{Name} attaque {player.Name} et lui inflige {Damage} points de dégâts";
         }
+        return $"";
+    }
 
+    public void Move(Map map)
+    {
+        int x, y;
+        do
+        {
+            x = PositionX + rd.Next(-1, 2);
+            y = PositionY + rd.Next(-1, 2);
+        } while (x >= 0 && x < map.Width && y >= 0 && y < map.Height && map.Grid[x, y] == '.');
         PositionX = x;
         PositionY = y;
     }
-    // public void Move(IslandView map)
-    // {
-    //     int dx = 0;
-    //     int dy = 0;
-
-    //     do
-    //     {
-    //         do
-    //         {
-    //             dx = rd.Next(-this.Level, this.Level);
-    //             dy = rd.Next(-this.Level, this.Level);
-    //         } while (PositionX + dx < map.Height && PositionX + dx > 0 && PositionY + dy < map.Width && PositionY + dy > 0);
-    //     } while (map.Grid[PositionX + dx, PositionY + dy] != '#');
-    // }
-
-    // Spawn déja fait sur une autre version non commitée, ne pas toucher à cette classe
-
 
 }

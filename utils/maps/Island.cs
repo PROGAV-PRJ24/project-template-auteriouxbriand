@@ -101,7 +101,7 @@ public class Island : Map
                     bool monsterFound = false;
                     foreach (var monster in monsters)
                     {
-                        if (monster.PositionX == i && monster.PositionY == j)
+                        if (monster.PositionX == i && monster.PositionY == j && monster.IsAlive)
                         {
                             Console.BackgroundColor = ConsoleColor.DarkGreen;
                             Console.Write(" M ");
@@ -126,7 +126,7 @@ public class Island : Map
                         }
                         else
                         {
-                            Console.BackgroundColor = Grid[i, j] == '.' ? ConsoleColor.Blue : (Grid[i, j] == '#' ? ConsoleColor.Yellow : ConsoleColor.Black);
+                            Console.BackgroundColor = Grid[i, j] == '.' ? ConsoleColor.Cyan : (Grid[i, j] == '#' ? ConsoleColor.Yellow : ConsoleColor.Black);
                             Console.Write(" " + Grid[i, j] + " "); // Affiche la carte
                             Console.ResetColor();
                         }

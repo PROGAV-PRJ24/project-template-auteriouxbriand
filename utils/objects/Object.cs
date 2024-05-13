@@ -15,7 +15,7 @@ public abstract class Object
         Depth = new Random().Next(1, 9);
     }
 
-    public List<Object> Loot()
+    public virtual List<Object> Loot()
     {
         return new List<Object> { this };
     }

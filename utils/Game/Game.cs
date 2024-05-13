@@ -17,7 +17,7 @@ public class Game
         Player currentUser;
 
         // Game initialization
-        this.Initialize();
+        this.Initialize(1);
 
         // Game loop
         while (state)
@@ -28,13 +28,16 @@ public class Game
         }
     }
 
-    private void Initialize()
+    private void Initialize(int playersNumber = 1)
     {
         // Ajout des joueurs et des monstres
-        Players.Add(new Player("Joueur 1", 1, CurrentMap));
-        Players.Add(new Player("Joueur 2", 1, CurrentMap));
+        for (int i = 0; i < playersNumber; i++)
+        {
+            Players.Add(new Player("Joueur " + i, 1, CurrentMap));
+        }
 
         Monsters.Add(new Monster("Monstre 1", CurrentMap));
+        Monsters.Add(new Monster("Monstre 2", CurrentMap));
 
         for (int i = 0; i < 10; i++)
         {
@@ -86,12 +89,39 @@ public class Game
                 player.Drop(CurrentMap); // Lâcher un objet
                 break;
             case ConsoleKey.A:
-                Console.WriteLine("Attaque");
-                // Player1.Attack(Player2); // Attaquer le joueur
+                bool hasAttacked = false;
+                Monster? affectedMonster = null;
+                if (this.Players.Count != 1)
+                {
+                    if (Players[0] == player)
+                        player.Attack(Players[1]); // Attaque le joueur 2 si le joueur 1 est le joueur actuel
+                    else
+                        player.Attack(Players[0]); // Attaque le joueur 1
+                }
+                foreach (var monster in Monsters)
+                {
+                    if (monster.isNearby(player, 2)) // Attaque les monstres présent dans une zone de 2 cases
+                    {
+                        player.Attack(monster);
+                        hasAttacked = true;
+                        affectedMonster = monster;
+                        break;
+                    }
+                }
+                player.Message = (hasAttacked) ? $"Vous avez attaqué le monstre {affectedMonster}, il lui reste {affectedMonster!.Health}" : "Aucun monstre à attaquer";
                 break;
 
         }
-        // Monster1.Move(CurrentMap);
+        foreach (var monster in Monsters)
+        {
+
+            foreach (var user in Players)
+            {
+                player.Message += monster.Attack(user);
+            }
+            monster.Move(CurrentMap);
+
+        }
         player.DisplayUserState();
     }
 

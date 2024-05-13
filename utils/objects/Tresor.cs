@@ -1,13 +1,6 @@
 public class Tresor : Object
 {
     Randomizer Rand = new Randomizer();
-    protected enum TypeObject
-    {
-        ColdMatcha,
-        HotMatcha,
-        GoldTicket,
-        Potion
-    }
     public List<Object> Loots { get; set; } = new List<Object>();
 
     public Tresor() : base('T', "Tresor")
@@ -23,11 +16,10 @@ public class Tresor : Object
         int nbLoots = rd.Next(1, 4);
         for (int i = 0; i < nbLoots; i++)
         {
-            Loots.Add(Rand.Object());
+            Loots.Add(Rand.Object(this));
         }
     }
-
-    new public List<Object> Loot()
+    public override List<Object> Loot()
     {
         return Loots;
     }

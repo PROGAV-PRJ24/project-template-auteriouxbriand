@@ -5,7 +5,15 @@ public class Player
     public string Name { get; set; }
 
     public int Level { get; set; }
-    public int Health { get; set; }
+    private double _health;
+    public double Health
+    {
+        get => _health;
+        set
+        {
+            _health = value / Protection;
+        }
+    }
     public int Damage { get; set; }
     public int Mana { get; set; }
     public double Protection { get; set; }
@@ -39,19 +47,21 @@ public class Player
 
     public Player(string name, int level, Map map, int x = 0, int y = 0)
     {
-        Message = "";
+        Message = new string("");
 
         this.Spawn(map);
 
         Name = name;
+        Protection = 1;
         Level = level;
         Health = level * 10;
-        Mana = level * 5;
+        Mana = level * 2;
         Energy = level * 5;
-        Protection = 0;
         Damage = level * 2;
         Inventory = new List<Object>();
         Chest = new List<Object>();
+
+
 
     }
 
@@ -96,14 +106,8 @@ public class Player
     }
     public void Attack(Monster monster)
     {
-        if (monster.PositionX == this.PositionX + 1 || monster.PositionX == this.PositionX - 1 || monster.PositionY == this.PositionY + 1 || monster.PositionY == this.PositionY - 1)
-        {
-            monster.Health -= Damage;
-        }
-        else
-        {
-            Message = "La cible est trop loin pour être attaquée";
-        }
+        monster.Health -= Damage * Mana;
+        this.Energy -= 0.5;
     }
     public void Drop(Island map)
     {
@@ -120,9 +124,10 @@ public class Player
             foreach (var item in Inventory)
             {
                 this.Chest.Add(item);
+                this.Score += item.Gain;
             }
             Inventory.Clear();
-            Message = "Vous avez déposé votre inventaire dans le coffre";
+            Message = "Vous avez déposé votre inventaire dans le coffre, vous avez désormais " + this.Score + " points de score";
         }
     }
     public void Dig(Island map)
@@ -148,7 +153,9 @@ public class Player
                     {
                         if (Inventory.Count < 5)
                         {
+                            Console.WriteLine(item.Name);
                             Inventory.Add(item);
+
                             found.Add(item);
                             map.RemoveObject(PositionX, PositionY);
                         }
@@ -206,7 +213,7 @@ public class Player
     }
     public void Move(int dx, int dy, Map map)
     {
-        if (Energy <= 0)
+        if (Energy < 1)
         {
             Message = "Vous n'avez plus d'énergie pour vous déplacer, vous vous noyez, vous perdez 1 point de vie";
             this.Spawn(map);
@@ -220,12 +227,16 @@ public class Player
         {
             PositionX = newX;
             PositionY = newY;
-            if (map.Grid[newX, newY] != '#')
+            if (map.Grid[newX, newY] != '#' && map.Grid[newX, newY] != 'b')
             {
-                Energy -= 0.05;
+                Energy -= 0.25;
             }
         }
         DiggedValue = 0;
+    }
+    public bool isNearby(Player player, int distance)
+    {
+        return Math.Abs(player.PositionX - this.PositionX) <= distance && Math.Abs(player.PositionY - this.PositionY) <= distance;
     }
 
     public void DisplayUserState()
