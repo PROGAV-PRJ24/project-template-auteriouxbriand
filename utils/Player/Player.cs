@@ -1,9 +1,6 @@
 
-public class Player
+public class Player : Entity
 {
-
-    public string Name { get; set; }
-
     public int Level { get; set; }
     private double _health;
     public double Health
@@ -14,7 +11,6 @@ public class Player
             _health = value / Protection;
         }
     }
-    public int Damage { get; set; }
     public int Mana { get; set; }
     public double Protection { get; set; }
 
