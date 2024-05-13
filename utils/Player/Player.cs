@@ -137,6 +137,11 @@ public class Player
             Message = "Vous n'avez plus d'énergie pour creuser";
             return;
         }
+        if (DiggedValue <= 9)
+        {
+            Message = "Vous ne pouvez pas creuser plus profond";
+            return;
+        }
         if (map.Objects[PositionX][PositionY] != null && map.Objects[PositionX][PositionY].state == true)
         {
             Message = "Vous creusez à la profondeur: " + DiggedValue;
@@ -162,7 +167,7 @@ public class Player
                         else
                         {
                             rest.Add(item);
-                            map.Objects[PositionX][PositionY].Depth = 0;
+                            map.Objects[PositionX][PositionY].Depth = 1;
                         }
 
                     }
