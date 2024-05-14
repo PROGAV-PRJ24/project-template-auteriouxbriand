@@ -3,7 +3,6 @@ public class Player
 {
 
     public string Name { get; set; }
-
     public int Level { get; set; }
     private double _health;
     public double Health
@@ -45,6 +44,8 @@ public class Player
         }
     }
 
+    public bool IsStronger { get; set; }
+
     public Player(string name, int level, Map map, int x = 0, int y = 0)
     {
         Message = new string("");
@@ -60,9 +61,7 @@ public class Player
         Damage = level * 2;
         Inventory = new List<Object>();
         Chest = new List<Object>();
-
-
-
+        IsStronger = false;
     }
 
     private void Spawn(Map map)
@@ -137,7 +136,7 @@ public class Player
             Message = "Vous n'avez plus d'énergie pour creuser";
             return;
         }
-        if (DiggedValue <= 9)
+        if (DiggedValue >= 9)
         {
             Message = "Vous ne pouvez pas creuser plus profond";
             return;
@@ -239,6 +238,58 @@ public class Player
         }
         DiggedValue = 0;
     }
+
+    public void Eat()
+    {
+        bool canEat = false;
+        int ind = 0;
+        int n = 0;
+        foreach (var item in Inventory)
+        {
+            if (item.Name == "Apple")
+            {
+                canEat = true;
+                ind = n;
+            }
+            n++;
+        }
+        if (canEat)
+        {
+            Inventory.RemoveAt(ind);
+            Energy++;
+            Message = "Vous venez de manger une pomme, vous gagnez 1 point d'énergie.";
+        }
+        else
+        {
+            Message = "Vous n'avez rien à manger dans votre inventaire.";
+        }
+    }
+
+    public void Drink()
+    {
+        bool canDrink = false;
+        int ind = 0;
+        int n = 0;
+        foreach (var item in Inventory)
+        {
+            if (item.Name == "Potion")
+            {
+                canDrink = true;
+                ind = n;
+            }
+            n++;
+        }
+        if (canDrink)
+        {
+            Inventory.RemoveAt(ind);
+            IsStronger = true;
+            Message = "Vous venez de boire une potion, désomais vos attaques serongt plus puissantes.";
+        }
+        else
+        {
+            Message = "Vous n'avez pas de potion à boire dans votre inventaire.";
+        }
+    }
     public bool isNearby(Player player, int distance)
     {
         return Math.Abs(player.PositionX - this.PositionX) <= distance && Math.Abs(player.PositionY - this.PositionY) <= distance;
@@ -262,6 +313,7 @@ public class Player
         Console.WriteLine("Santé: " + Health);
         Console.WriteLine("Mana: " + Mana);
         Console.WriteLine("Energie: " + Math.Round(Energy));
+        Console.WriteLine("Score: " + Score);
 
 
         Console.Write("Inventaire: : ");
