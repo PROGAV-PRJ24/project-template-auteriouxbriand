@@ -41,7 +41,7 @@ public class Player : Entity
         }
     }
 
-    public Player(string name, int level, Map map, int x = 0, int y = 0)
+    public Player(string name, int level, Island map, int x = 0, int y = 0) : base(name, map)
     {
         Message = new string("");
 
@@ -56,9 +56,6 @@ public class Player : Entity
         Damage = level * 2;
         Inventory = new List<Object>();
         Chest = new List<Object>();
-
-
-
     }
 
     private void Spawn(Map map)
@@ -133,11 +130,6 @@ public class Player : Entity
             Message = "Vous n'avez plus d'énergie pour creuser";
             return;
         }
-        if (DiggedValue <= 9)
-        {
-            Message = "Vous ne pouvez pas creuser plus profond";
-            return;
-        }
         if (map.Objects[PositionX][PositionY] != null && map.Objects[PositionX][PositionY].state == true)
         {
             Message = "Vous creusez à la profondeur: " + DiggedValue;
@@ -163,7 +155,7 @@ public class Player : Entity
                         else
                         {
                             rest.Add(item);
-                            map.Objects[PositionX][PositionY].Depth = 1;
+                            map.Objects[PositionX][PositionY].Depth = 0;
                         }
 
                     }
