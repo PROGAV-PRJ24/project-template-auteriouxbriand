@@ -88,6 +88,12 @@ public class Game
             case ConsoleKey.Spacebar:
                 player.Drop(CurrentMap); // Lâcher un objet
                 break;
+            case ConsoleKey.M:
+                player.Eat();
+                break;
+            case ConsoleKey.B:
+                player.Drink();
+                break;
             case ConsoleKey.A:
                 bool hasAttacked = false;
                 Monster? affectedMonster = null;
@@ -131,4 +137,5 @@ public class Game
         if (Console.ReadKey().Key == ConsoleKey.Escape)
             Environment.Exit(0);
     }
+
 }
