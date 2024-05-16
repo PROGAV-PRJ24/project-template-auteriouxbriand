@@ -89,8 +89,8 @@ public class Island : Map
                 {
                     if (player.PositionX == i && player.PositionY == j)
                     {
-                        Console.BackgroundColor = ConsoleColor.Red;
-                        Console.Write(" P ");
+                        Console.BackgroundColor = player.Color;
+                        Console.Write($" {player.Symbol} ");
                         Console.ResetColor();
                         playerFound = true;
                         break;

@@ -12,6 +12,6 @@ public class GoldTicket : Object
     }
     public override string ToString()
     {
-        return $"Ticket d'or qui vaut super cher et qui met bien";
+        return $"Gold ticket";
     }
 }

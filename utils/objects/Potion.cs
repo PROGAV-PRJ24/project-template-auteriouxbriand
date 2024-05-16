@@ -2,12 +2,14 @@ public class Potion : Object
 {
     public Potion() : base('U', "Potion")
     {
-        Gain = 50;
+        Gain = 10;
+        Drinkable = true;
     }
     public Potion(char symb = 'U', string name = "Potion")
     : base(symb, name)
     {
-        Gain = 50;
+        Gain = 10;
+        Drinkable = true;
     }
 
     public override string ToString()

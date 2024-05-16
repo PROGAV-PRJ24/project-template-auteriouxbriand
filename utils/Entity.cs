@@ -4,6 +4,7 @@ public abstract class Entity
 
     // Identity 
     public string Name { get; set; }
+    public ConsoleColor Color { get; set; }
     public char Symbol { get; set; }
 
     // Stats

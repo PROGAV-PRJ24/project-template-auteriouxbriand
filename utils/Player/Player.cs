@@ -1,8 +1,6 @@
 
 public class Player : Entity
 {
-
-    public string Name { get; set; }
     public int Level { get; set; }
     private double _health;
     public double Health
@@ -22,65 +20,39 @@ public class Player : Entity
 
     public int Score { get; set; }
 
-    public int PositionX { get; private set; }
-    public int PositionY { get; private set; }
-
     public List<Object> Inventory { get; set; }
 
     public List<Object> Chest { get; set; }
 
     public string Message { get; set; }
 
-    public bool IsAlive
-    {
-        get
-        {
-            return Health > 0;
-        }
-        set
-        {
-
-        }
-    }
-
     public bool IsStronger { get; set; }
 
-    public Player(string name, int level, Island map, int x = 0, int y = 0) : base(name, map)
+    public Player(string name, int level, Island map) : base(name, map)
     {
+        // Init player log
         Message = new string("");
 
-        this.Spawn(map);
-
-        Name = name;
+        // Init player stats
         Protection = 1;
         Level = level;
         Health = level * 10;
         Mana = level * 2;
         Energy = level * 5;
         Damage = level * 2;
+
+        // Init player caracteristics
         Inventory = new List<Object>();
         Chest = new List<Object>();
     }
-
-    private void Spawn(Map map)
+    public void Respawn(Map map)
     {
         Health -= 1;
         Energy = Level * 5;
         Mana = Level * 5;
-        Random rand = new Random();
-        int x = rand.Next(0, map.Width);
-        int y = rand.Next(0, map.Height);
 
-        while (map.Grid[x, y] != '#')
-        {
-            x = rand.Next(0, map.Width);
-            y = rand.Next(0, map.Height);
-        }
-
-        PositionX = x;
-        PositionY = y;
+        this.Spawn(map);
     }
-
     public void LevelUp()
     {
         Level++;
@@ -88,7 +60,6 @@ public class Player : Entity
         Mana += 5;
         Damage += 2;
     }
-
     public void Attack(Player target)
     {
         if (target.PositionX == this.PositionX + 1 || target.PositionX == this.PositionX - 1 || target.PositionY == this.PositionY + 1 || target.PositionY == this.PositionY - 1)
@@ -218,7 +189,7 @@ public class Player : Entity
         if (Energy < 1)
         {
             Message = "Vous n'avez plus d'énergie pour vous déplacer, vous vous noyez, vous perdez 1 point de vie";
-            this.Spawn(map);
+            this.Respawn(map);
             return;
         }
         int newX = PositionX + dx;
@@ -236,65 +207,47 @@ public class Player : Entity
         }
         DiggedValue = 0;
     }
-
     public void Eat()
     {
-        bool canEat = false;
-        int ind = 0;
-        int n = 0;
+        bool hasAte = false;
         foreach (var item in Inventory)
         {
-            if (item.Name == "Apple")
+            if (item.Eatable)
             {
-                canEat = true;
-                ind = n;
+                Inventory.Remove(item);
+                Energy += item.Gain;
+                hasAte = true;
+                Message = $"Vous venez deguster un(e) {item.Name} et vous avez gagné {item.Gain} point d'énergie";
+                break;
             }
-            n++;
         }
-        if (canEat)
+        if (!hasAte)
         {
-            Inventory.RemoveAt(ind);
-            Energy++;
-            Message = "Vous venez de manger une pomme, vous gagnez 1 point d'énergie.";
-        }
-        else
-        {
-            Message = "Vous n'avez rien à manger dans votre inventaire.";
+            Message = "Vous n'avez rien à manger";
         }
     }
-
     public void Drink()
     {
-        bool canDrink = false;
-        int ind = 0;
-        int n = 0;
+        bool hasDrunk = false;
         foreach (var item in Inventory)
         {
-            if (item.Name == "Potion")
+            if (item.Drinkable)
             {
-                canDrink = true;
-                ind = n;
+                Inventory.Remove(item);
+                Energy += item.Gain;
+                hasDrunk = true;
+                Message = $"Vous venez deguster un(e) {item.Name} et vous avez gagné {item.Gain} point d'énergie";
+                break;
             }
-            n++;
         }
-        if (canDrink)
+        if (!hasDrunk)
         {
-            Inventory.RemoveAt(ind);
-            IsStronger = true;
-            Message = "Vous venez de boire une potion, désomais vos attaques serongt plus puissantes.";
-        }
-        else
-        {
-            Message = "Vous n'avez pas de potion à boire dans votre inventaire.";
+            Message = "Vous n'avez rien à boire";
         }
     }
-    public bool isNearby(Player player, int distance)
-    {
-        return Math.Abs(player.PositionX - this.PositionX) <= distance && Math.Abs(player.PositionY - this.PositionY) <= distance;
-    }
-
     public void DisplayUserState()
     {
+        Console.ForegroundColor = Color;
         Console.WriteLine(new string('-', 90));
         Console.WriteLine(new string('-', 90));
 
@@ -322,6 +275,7 @@ public class Player : Entity
         Console.WriteLine();
         Console.WriteLine(new string('-', 90));
         Console.WriteLine(new string('-', 90));
+        Console.ResetColor();
     }
 
 }
