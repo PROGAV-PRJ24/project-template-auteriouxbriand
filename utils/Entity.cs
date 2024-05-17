@@ -9,6 +9,15 @@ public abstract class Entity
 
     // Stats
     public int Damage { get; set; }
+    protected double _health;
+    public double Health
+    {
+        get { return _health; }
+        set { _health = value; Alive = _health > 0; }
+    }
+    public bool Alive { get; set; }
+
+
 
     // Position
     public int PositionX { get; protected set; }
@@ -17,7 +26,7 @@ public abstract class Entity
     public Entity(string name, Island map)
     {
         Name = name;
-
+        Alive = true;
         Spawn(map);
     }
 

@@ -2,13 +2,14 @@
 public class Player : Entity
 {
     public int Level { get; set; }
-    private double _health;
-    public double Health
+
+    new public double Health
     {
         get => _health;
         set
         {
             _health = value / Protection;
+            Alive = _health > 0;
         }
     }
     public int Mana { get; set; }
@@ -126,7 +127,6 @@ public class Player : Entity
                     {
                         if (Inventory.Count < 5)
                         {
-                            Console.WriteLine(item.Name);
                             Inventory.Add(item);
 
                             found.Add(item);

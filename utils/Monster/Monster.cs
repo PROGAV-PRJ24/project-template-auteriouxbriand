@@ -1,38 +1,6 @@
 public class Monster : Entity
 {
-    private double _health;
     public int Level { get; set; }
-    public double Health
-    {
-        get => _health;
-        set
-        {
-            _health = value;
-            if (_health < 1)
-            {
-                IsAlive = false;
-
-            }
-        }
-    }
-
-    private bool _isAlive;
-    public bool IsAlive
-    {
-        get
-        {
-            if (Health < 1)
-            {
-                return false;
-            }
-            return true;
-        }
-        set
-        {
-            _isAlive = value;
-        }
-    }
-
     public Monster(string name, Island map, int level = 1, int x = 0, int y = 0) : base(name, map)
     {
         Level = level;

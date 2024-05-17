@@ -30,6 +30,8 @@ public class Game
 
         int playerType;
         string playerName;
+
+        // Game mode selection
         switch (gameMode)
         {
             case 1:
@@ -68,6 +70,12 @@ public class Game
             currentUser = Players![tourNumber % Players.Count];
             this.Tour(currentUser);
             tourNumber++;
+            if (currentUser.Alive == false)
+            {
+                Console.WriteLine($"{currentUser.Name} perd cette partie !");
+                state = false;
+                EndGame();
+            }
         }
     }
 
@@ -222,7 +230,7 @@ public class Game
                 }
                 foreach (var monster in Monsters)
                 {
-                    if (monster.isNearby(player, 2)) // Attaque les monstres présent dans une zone de 2 cases
+                    if (monster.isNearby(player, 2) && monster.Alive) // Attaque les monstres présent dans une zone de 2 cases
                     {
                         player.Attack(monster);
                         hasAttacked = true;
@@ -265,5 +273,19 @@ public class Game
         Console.WriteLine("-----Appuyez sur une touche pour continuer... Appuyez sur Echap pour quitter.-----");
         if (Console.ReadKey().Key == ConsoleKey.Escape)
             Environment.Exit(0);
+    }
+    public void EndGame()
+    {
+        Console.WriteLine("Fin du jeu");
+        Console.WriteLine(new string('-', 90));
+        Console.WriteLine("Merci d'avoir joué !");
+        Console.WriteLine("Appuyez sur R pour rejouer ou sur une autre touche pour quitter.");
+        if (Console.ReadKey().Key != ConsoleKey.R)
+        {
+            Environment.Exit(0);
+        }
+        Console.Clear();
+        new Game();
+
     }
 }

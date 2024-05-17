@@ -101,7 +101,7 @@ public class Island : Map
                     bool monsterFound = false;
                     foreach (var monster in monsters)
                     {
-                        if (monster.PositionX == i && monster.PositionY == j && monster.IsAlive)
+                        if (monster.PositionX == i && monster.PositionY == j && monster.Alive)
                         {
                             Console.BackgroundColor = ConsoleColor.DarkGreen;
                             Console.Write(" M ");
