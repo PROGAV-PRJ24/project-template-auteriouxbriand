@@ -14,7 +14,6 @@ public class Game
     public List<Player> Players { get; set; }
     public List<Monster> Monsters { get; set; }
     public Island CurrentMap { get; set; }
-
     public Game()
     {
         // Init actors of the game
@@ -76,16 +75,20 @@ public class Game
                 state = false;
                 EndGame();
             }
+            else if (currentUser.Winner)
+            {
+                Console.WriteLine($"{currentUser.Name} a gagné cette partie !");
+                state = false;
+                EndGame();
+            }
         }
     }
-
     private void PrintWelcomeMessage()
     {
         Console.WriteLine(new string('-', 90));
         Console.WriteLine("Bienvenue dans le jeu de rôle");
         Console.WriteLine(new string('-', 90));
     }
-
     private void PrintGameRules()
     {
         Console.WriteLine("Règles du jeu :");
@@ -106,7 +109,6 @@ public class Game
         Console.WriteLine(new string('-', 90));
         Console.WriteLine("Bonne chance !");
     }
-
     private int getUserGamePreferences()
     {
         Console.WriteLine("Choisissez le mode de jeu :");
@@ -114,10 +116,20 @@ public class Game
         Console.WriteLine("2. Mode multijoueur");
         Console.WriteLine("3. Mode multijoueur contre un bot");
 
-        int gameMode = Convert.ToInt32(Console.ReadLine());
-        return gameMode;
-    }
+        try
+        {
+            int gameMode = Convert.ToInt32(Console.ReadLine()!);
+            return gameMode;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Erreur lors de la saisie du mode de jeu" + e.Message);
+            Console.Clear();
+            new Game();
+            return 0;
+        }
 
+    }
     private string getPlayerName(string PlayerId = "Joueur 1")
     {
         Console.WriteLine("Entrez votre nom :");
@@ -125,7 +137,6 @@ public class Game
         Console.WriteLine($"Vous avez choisi le nom {playerName} !");
         return playerName;
     }
-
     private int getPlayerType(string PlayerId = "Joueur 1")
     {
         Console.WriteLine("Choisissez votre type de joueur :");
@@ -134,8 +145,19 @@ public class Game
         Console.WriteLine("3. Licorne");
         Console.WriteLine("4. Jean Norbert");
 
-        int playerType = Convert.ToInt32(Console.ReadLine()!);
-        return playerType;
+        try
+        {
+            int playerType = Convert.ToInt32(Console.ReadLine()!);
+            return playerType;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Erreur lors de la saisie du type de joueur", e.Message);
+            Console.Clear();
+            new Game();
+            return 0;
+        }
+
     }
     private void InitializePlayer(int playersNumber = 1, string playerName1 = "Joueur 1", int playerType1 = 1)
     {
@@ -154,12 +176,34 @@ public class Game
 
         this.Initialize();
     }
-
-    private void InitializePlayers(int playersNumber = 1, string playerName1 = "Joueur 1", int playerType1 = 1, string playerName2 = "Joueur 2", int playerType2 = 1)
+    private void InitializePlayers(int playersNumber = 2, string playerName1 = "Joueur 1", int playerType1 = 1, string playerName2 = "Joueur 2", int playerType2 = 1000)
     {
+        PlayerType firstplayerType = (PlayerType)playerType1;
+        PlayerType secondplayerType = (PlayerType)playerType2;
+
+        Type SelectedType = firstplayerType switch
+        {
+            PlayerType.Pirate => typeof(Pirate),
+            PlayerType.Magicien => typeof(Magicien),
+            PlayerType.Licorne => typeof(Licorne),
+            PlayerType.JeanNorbert => typeof(JeanNorbert),
+            PlayerType.Bot => typeof(Bot),
+            _ => typeof(Bot),
+        };
         // Ajout des joueurs et des monstres
-        Players.Add(new Player(playerName1, 1, CurrentMap));
-        Players.Add(new Player(playerName2, 1, CurrentMap));
+        object player1 = Activator.CreateInstance(SelectedType, new object[] { playerName1, 1, CurrentMap })!;
+        Players.Add((Player)player1);
+
+        SelectedType = secondplayerType switch
+        {
+            PlayerType.Pirate => typeof(Pirate),
+            PlayerType.Magicien => typeof(Magicien),
+            PlayerType.Licorne => typeof(Licorne),
+            PlayerType.JeanNorbert => typeof(JeanNorbert),
+            _ => typeof(Bot),
+        };
+        object player2 = Activator.CreateInstance(SelectedType, new object[] { playerName2, 1, CurrentMap })!;
+        Players.Add((Player)player2);
 
         this.Initialize();
     }
@@ -169,11 +213,11 @@ public class Game
         {
             Monsters.Add(new Monster("Monstre" + i, CurrentMap));
         }
-
         for (int i = 0; i < 15; i++)
         {
             CurrentMap.AddObject();
         }
+        CurrentMap.AddObject(new Book("Cognitique: Science et pratique des relations à la machine à penser"));
     }
     private void ConsoleKeyAction(Player player, ConsoleKeyInfo keyInfo)
     {
@@ -219,28 +263,33 @@ public class Game
                 player.Drink();
                 break;
             case ConsoleKey.A:
-                bool hasAttacked = false;
-                Monster? affectedMonster = null;
-                if (this.Players.Count != 1)
-                {
-                    if (Players[0] == player)
-                        player.Attack(Players[1]); // Attaque le joueur 2 si le joueur 1 est le joueur actuel
-                    else
-                        player.Attack(Players[0]); // Attaque le joueur 1
-                }
-                foreach (var monster in Monsters)
-                {
-                    if (monster.isNearby(player, 2) && monster.Alive) // Attaque les monstres présent dans une zone de 2 cases
-                    {
-                        player.Attack(monster);
-                        hasAttacked = true;
-                        affectedMonster = monster;
-                        break;
-                    }
-                }
-                player.Message = (hasAttacked) ? $"Vous avez attaqué le monstre {affectedMonster}, il lui reste {affectedMonster!.Health}" : "Aucun monstre à attaquer";
+                this.ManageAttack(player);
                 break;
         }
+    }
+    private void ManageAttack(Player player)
+    {
+        bool hasAttacked = false;
+        Monster? affectedMonster = null;
+        // Console.WriteLine($"{player.Name} - {player.Alive} - {player.GetType()} - {player.isNearby(Players[(Players.IndexOf(player) + 1) % 2], 2)} ");
+        if (this.Players.Count != 1)
+        {
+            if (Players[0] == player)
+                player.Attack(Players[1]); // Attaque le joueur 2 si le joueur 1 est le joueur actuel
+            else
+                player.Attack(Players[0]); // Attaque le joueur 1 si le joueur actuel est le joueur 2
+        }
+        foreach (var monster in Monsters)
+        {
+            if (monster.isNearby(player, player.Spread) && monster.Alive) // Attaque les monstres présent dans une zone de 2 cases
+            {
+                player.Attack(monster);
+                hasAttacked = true;
+                affectedMonster = monster;
+                break;
+            }
+        }
+        player.Message += (hasAttacked) ? $"\n Vous avez attaqué le monstre {affectedMonster}, il lui reste {affectedMonster!.Health}" : "\n Aucun monstre à attaquer";
     }
     private void MonstersActions(Player player)
     {
@@ -260,10 +309,15 @@ public class Game
         CurrentMap.Render(Players, Monsters); // Affichage de la carte
 
         ConsoleKeyInfo keyInfo = Console.ReadKey(); // Lecture de la direction de déplacement
-
         Console.Clear(); // Efface la console avant d'afficher la carte mise à jour
 
-        this.ConsoleKeyAction(player, keyInfo); // Action du joueur
+        // Console.WriteLine(player.GetType());  Ligne de test pour vérifier le type de joueur
+
+        if (player.GetType() == typeof(Bot))
+            ((Bot)player).Move(CurrentMap);
+        else
+            this.ConsoleKeyAction(player, keyInfo); // Action du joueur
+
         this.MonstersActions(player); // Action des monstres
 
         player.DisplayUserState(); // Affichage de l'état du joueur

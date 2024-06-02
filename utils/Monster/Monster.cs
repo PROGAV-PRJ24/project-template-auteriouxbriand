@@ -14,7 +14,7 @@ public class Monster : Entity
         if (player.PositionX == PositionX && player.PositionY == PositionY)
         {
             player.Health -= Damage;
-            return $"{Name} attaque {player.Name} et lui inflige {Damage} points de dégâts";
+            return $"\n {Name} attaque {player.Name} et lui inflige {Damage} points de dégâts";
         }
         return $"";
     }

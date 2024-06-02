@@ -17,8 +17,6 @@ public abstract class Entity
     }
     public bool Alive { get; set; }
 
-
-
     // Position
     public int PositionX { get; protected set; }
     public int PositionY { get; protected set; }

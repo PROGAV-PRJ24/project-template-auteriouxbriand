@@ -1,8 +1,8 @@
 
 public class Player : Entity
 {
+    public bool Winner { get; set; } = false;
     public int Level { get; set; }
-
     new public double Health
     {
         get => _health;
@@ -12,23 +12,45 @@ public class Player : Entity
             Alive = _health > 0;
         }
     }
-    public int Mana { get; set; }
+    private int mana;
+    public int Mana
+    {
+        get => mana;
+        set
+        {
+
+            if (mana == 10)
+            {
+                mana += 0;
+            }
+            else
+            {
+                mana = value;
+            }
+        }
+    }
+    public int Spread { get; set; } = 1;
     public double Protection { get; set; }
-
     public double Energy { get; set; }
-
     public int DiggedValue { get; set; }
-
-    public int Score { get; set; }
-
+    private int score;
+    public int Score
+    {
+        get => score;
+        set
+        {
+            score += value;
+            if (score + value % 10 == 0)
+            {
+                LevelUp();
+                score = 0;
+            }
+        }
+    }
     public List<Object> Inventory { get; set; }
-
     public List<Object> Chest { get; set; }
-
     public string Message { get; set; }
-
     public bool IsStronger { get; set; }
-
     public Player(string name, int level, Island map) : base(name, map)
     {
         // Init player log
@@ -61,19 +83,21 @@ public class Player : Entity
         Mana += 5;
         Damage += 2;
     }
-    public void Attack(Player target)
+    public virtual void Attack(Player target)
     {
-        if (target.PositionX == this.PositionX + 1 || target.PositionX == this.PositionX - 1 || target.PositionY == this.PositionY + 1 || target.PositionY == this.PositionY - 1)
+        if (target.Alive && this.isNearby(target, this.Spread))
         {
-            target.Health -= Damage;
-            Message = "Vous avez attaqué enlevé " + Damage + " points de vie à " + target.Name;
+            target.Health -= Damage * Mana;
+            this.Energy -= 0.5;
+            this.Message += $"\n Vous avez attaqué le joueur {target.Name}, il lui reste {target.Health} points de vie.";
+            this.Mana -= 1;
         }
         else
         {
-            Message = "La cible est trop loin pour être attaquée";
+            this.Message += $"\n Aucun joueur à attaquer à proximité.";
         }
     }
-    public void Attack(Monster monster)
+    public virtual void Attack(Monster monster)
     {
         monster.Health -= Damage * Mana;
         this.Energy -= 0.5;
@@ -94,10 +118,17 @@ public class Player : Entity
             {
                 this.Chest.Add(item);
                 this.Score += item.Gain;
+                if (item.GetType() == typeof(GoldTicket))
+                {
+                    this.Damage += 2;
+                    Message = "Un ticket d'or est échangé contre une nouvelle épée, vous gagnez 2 points de dégâts";
+                }
             }
             Inventory.Clear();
             Message = "Vous avez déposé votre inventaire dans le coffre, vous avez désormais " + this.Score + " points de score";
         }
+        Energy = 10;
+        Message += "\n Vous récupérez de l'énergie";
     }
     public void Dig(Island map)
     {
@@ -127,6 +158,14 @@ public class Player : Entity
                     {
                         if (Inventory.Count < 5)
                         {
+                            if (item.GetType() == typeof(Book) && this.GetType() == typeof(JeanNorbert))
+                            {
+                                if (((Book)item).Title == "Cognitique: Science et pratique des relations à la machine à penser")
+                                {
+                                    Winner = true;
+                                }
+                                Score += item.Gain;
+                            }
                             Inventory.Add(item);
 
                             found.Add(item);
@@ -184,7 +223,7 @@ public class Player : Entity
             Message = "Il n'y a rien à creuser ici";
         }
     }
-    public void Move(int dx, int dy, Map map)
+    public virtual void Move(int dx, int dy, Map map)
     {
         if (Energy < 1)
         {

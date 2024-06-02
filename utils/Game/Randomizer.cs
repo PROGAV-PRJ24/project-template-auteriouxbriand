@@ -5,7 +5,7 @@ public class Randomizer
 
     public Object Object()
     {
-        List<Type> objectTypes = new List<Type> { typeof(ColdMatcha), typeof(HotMatcha), typeof(GoldTicket), typeof(Potion), typeof(Tresor), typeof(Apple) };
+        List<Type> objectTypes = new List<Type> { typeof(ColdMatcha), typeof(HotMatcha), typeof(GoldTicket), typeof(Potion), typeof(Tresor), typeof(Apple), typeof(Book) };
 
         // Générateur de nombres aléatoires
         Random random = new Random();
@@ -23,7 +23,7 @@ public class Randomizer
     }
     public Object Object(Object? excluder)
     {
-        List<Type> objectTypes = new List<Type> { typeof(ColdMatcha), typeof(HotMatcha), typeof(GoldTicket), typeof(Potion), typeof(Tresor), typeof(Apple) };
+        List<Type> objectTypes = new List<Type> { typeof(ColdMatcha), typeof(HotMatcha), typeof(GoldTicket), typeof(Potion), typeof(Tresor), typeof(Apple), typeof(Book) };
 
         // Générateur de nombres aléatoires
         Random random = new Random();

@@ -4,6 +4,5 @@ public class Pirate : Player
     {
         this.Symbol = 'P';
         this.Color = ConsoleColor.DarkRed;
-
     }
 }

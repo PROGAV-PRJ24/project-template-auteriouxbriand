@@ -4,5 +4,6 @@ public class JeanNorbert : Player
     {
         this.Symbol = 'J';
         this.Color = ConsoleColor.Black;
+        Health = 5;
     }
 }

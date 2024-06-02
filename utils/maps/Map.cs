@@ -8,7 +8,11 @@ public abstract class Map
     public char[,] Grid { get; set; }
     protected static Random rd = new Random();
 
-    public Map() { }
+    public Map()
+    {
+        this.Dimensions = Config.Instance.LAND_MAP_SIZE;
+        this.Grid = new char[Height, Width];
+    }
 
     public void BuildBoat()
     {

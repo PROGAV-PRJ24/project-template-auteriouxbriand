@@ -71,6 +71,17 @@ public class Island : Map
         while (Grid[x, y] == '.' || Grid[x, y] == 'b');
         Objects[x][y] = Rand.Object();
     }
+    public void AddObject(Object obj)
+    {
+        int x, y;
+        do
+        {
+            x = rd.Next(0, Width);
+            y = rd.Next(0, Height);
+        }
+        while (Grid[x, y] == '.' || Grid[x, y] == 'b');
+        Objects[x][y] = obj;
+    }
 
     public void RemoveObject(int x, int y)
     {
