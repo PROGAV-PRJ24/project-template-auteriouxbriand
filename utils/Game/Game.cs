@@ -64,7 +64,7 @@ public class Game
         Player currentUser;
 
         // Game loop
-        while (state)
+        while (state || CurrentMap.isEmpty)
         {
             currentUser = Players![tourNumber % Players.Count];
             this.Tour(currentUser);
@@ -77,7 +77,7 @@ public class Game
             }
             else if (currentUser.Winner)
             {
-                Console.WriteLine($"{currentUser.Name} a gagné cette partie !");
+                Console.WriteLine($"{currentUser.Name} a gagné cette partie avec un score de {currentUser.Score} !");
                 state = false;
                 EndGame();
             }
@@ -320,6 +320,7 @@ public class Game
 
         this.MonstersActions(player); // Action des monstres
 
+        player.Mana++; // Régénération de la mana du joueur
         player.DisplayUserState(); // Affichage de l'état du joueur
     }
     public void Pause()

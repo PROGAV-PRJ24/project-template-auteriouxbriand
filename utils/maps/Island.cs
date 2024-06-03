@@ -3,6 +3,14 @@ public class Island : Map
     Randomizer Rand = new Randomizer();
     public List<List<Object>> Objects { get; set; }
 
+    public bool isEmpty
+    {
+        get
+        {
+            return Objects.TrueForAll(row => row.TrueForAll(cell => cell == null));
+        }
+    }
+
     public Island() : base()
     {
         // Config definition

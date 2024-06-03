@@ -43,7 +43,6 @@ public class Player : Entity
             if (score + value % 10 == 0)
             {
                 LevelUp();
-                score = 0;
             }
         }
     }
@@ -174,7 +173,7 @@ public class Player : Entity
                         else
                         {
                             rest.Add(item);
-                            map.Objects[PositionX][PositionY].Depth = 0;
+                            map.Objects[PositionX][PositionY].Depth = 1;
                         }
 
                     }
