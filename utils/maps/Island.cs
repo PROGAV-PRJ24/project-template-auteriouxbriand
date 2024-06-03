@@ -1,8 +1,9 @@
 public class Island : Map
 {
-    Randomizer Rand = new Randomizer();
-    public List<List<Object>> Objects { get; set; }
+    Randomizer Rand = new Randomizer(); // Initialiser un générateur d'objets aléatoires
+    public List<List<Object>> Objects { get; set; } // Liste d'objets sur l'île
 
+    // Propriété pour vérifier si l'île est vide (toutes les cellules sont null)
     public bool isEmpty
     {
         get
@@ -11,14 +12,15 @@ public class Island : Map
         }
     }
 
+    // Constructeur de la classe Island
     public Island() : base()
     {
-        // Config definition
+        // Définition de la configuration
         this.Dimensions = Config.Instance.LAND_MAP_SIZE;
         this.Height = Dimensions[0];
         this.Width = Dimensions[1];
 
-        // Grid definition
+        // Définition de la grille
         this.Grid = new char[Height, Width];
         this.Objects = new List<List<Object>>();
         for (int i = 0; i < Height; i++)
@@ -26,20 +28,21 @@ public class Island : Map
             List<Object> row = new List<Object>();
             for (int j = 0; j < Width; j++)
             {
-                row.Add(null!);
+                row.Add(null!); // Ajouter des objets null pour chaque cellule
             }
             Objects.Add(row);
         }
 
-        // Filling map with empty cells
+        // Remplissage de la carte avec des cellules vides
         for (int i = 0; i < Height; i++)
             for (int j = 0; j < Width; j++)
                 Grid[i, j] = '.';
 
-        this.BuildGridTerrain(5); // Générer 3 îles
+        this.BuildGridTerrain(5); // Générer 5 îles
         this.BuildBoat(); // Générer un bateau
     }
 
+    // Méthode pour construire le terrain de la grille
     private void BuildGridTerrain(int numIslands)
     {
         Random rand = new Random();
@@ -68,6 +71,7 @@ public class Island : Map
         }
     }
 
+    // Méthode pour ajouter un objet à une position aléatoire sur la carte
     public void AddObject()
     {
         int x, y;
@@ -76,9 +80,11 @@ public class Island : Map
             x = rd.Next(0, Width);
             y = rd.Next(0, Height);
         }
-        while (Grid[x, y] == '.' || Grid[x, y] == 'b');
-        Objects[x][y] = Rand.Object();
+        while (Grid[x, y] == '.' || Grid[x, y] == 'b'); // Trouver une position qui n'est ni vide ni un bateau
+        Objects[x][y] = Rand.Object(); // Ajouter un objet généré aléatoirement
     }
+
+    // Surcharge de la méthode AddObject pour ajouter un objet spécifique
     public void AddObject(Object obj)
     {
         int x, y;
@@ -87,16 +93,18 @@ public class Island : Map
             x = rd.Next(0, Width);
             y = rd.Next(0, Height);
         }
-        while (Grid[x, y] == '.' || Grid[x, y] == 'b');
-        Objects[x][y] = obj;
+        while (Grid[x, y] == '.' || Grid[x, y] == 'b'); // Trouver une position qui n'est ni vide ni un bateau
+        Objects[x][y] = obj; // Ajouter l'objet spécifique
     }
 
+    // Méthode pour retirer un objet de la carte
     public void RemoveObject(int x, int y)
     {
         if (Objects[x][y] != null)
-            Objects[x][y].state = false;
+            Objects[x][y].state = false; // Marquer l'objet comme inactif
     }
 
+    // Méthode pour afficher la carte avec les joueurs et les monstres
     public override void Render(List<Player> players, List<Monster> monsters)
     {
         for (int i = 0; i < Height; i++)
@@ -109,7 +117,7 @@ public class Island : Map
                     if (player.PositionX == i && player.PositionY == j)
                     {
                         Console.BackgroundColor = player.Color;
-                        Console.Write($" {player.Symbol} ");
+                        Console.Write($" {player.Symbol} "); // Afficher le joueur
                         Console.ResetColor();
                         playerFound = true;
                         break;
@@ -123,7 +131,7 @@ public class Island : Map
                         if (monster.PositionX == i && monster.PositionY == j && monster.Alive)
                         {
                             Console.BackgroundColor = ConsoleColor.DarkGreen;
-                            Console.Write(" M ");
+                            Console.Write(" M "); // Afficher le monstre
                             Console.ResetColor();
                             monsterFound = true;
                             break;
@@ -134,19 +142,19 @@ public class Island : Map
                         if (Grid[i, j] == 'b')
                         {
                             Console.BackgroundColor = ConsoleColor.DarkRed;
-                            Console.Write(" + ");
+                            Console.Write(" + "); // Afficher le bateau
                             Console.ResetColor();
                         }
                         else if (Objects[i][j] != null && Objects[i][j].state)
                         {
                             Console.BackgroundColor = ConsoleColor.Green;
-                            Console.Write(" X ");
+                            Console.Write(" X "); // Afficher l'objet
                             Console.ResetColor();
                         }
                         else
                         {
                             Console.BackgroundColor = Grid[i, j] == '.' ? ConsoleColor.Cyan : (Grid[i, j] == '#' ? ConsoleColor.Yellow : ConsoleColor.Black);
-                            Console.Write(" " + Grid[i, j] + " "); // Affiche la carte
+                            Console.Write(" " + Grid[i, j] + " "); // Afficher la carte
                             Console.ResetColor();
                         }
                     }

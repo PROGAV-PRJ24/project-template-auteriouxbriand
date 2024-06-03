@@ -1,7 +1,6 @@
-using System.ComponentModel.Design;
-
 public class Game
 {
+    // Déclaration d'une énumération pour les types de joueurs avec leurs valeurs respectives
     private enum PlayerType
     {
         Pirate = 1,
@@ -10,37 +9,46 @@ public class Game
         JeanNorbert = 4,
         Bot = 1000,
     }
-    private bool state = true; // Booléen pour savoir si le jeu est en cours
+
+    // Booléen pour savoir si le jeu est en cours
+    private bool state = true;
+
+    // Listes des joueurs et des monstres
     public List<Player> Players { get; set; }
     public List<Monster> Monsters { get; set; }
+
+    // Carte actuelle du jeu
     public Island CurrentMap { get; set; }
+
+    // Constructeur de la classe Game
     public Game()
     {
-        // Init actors of the game
+        // Initialisation des joueurs, des monstres et de la carte
         Players = new List<Player>();
         Monsters = new List<Monster>();
         CurrentMap = new Island();
 
-        // Launch the game
+        // Lancement du jeu
         this.PrintWelcomeMessage();
         this.PrintGameRules();
 
+        // Récupération des préférences de jeu de l'utilisateur
         int gameMode = this.getUserGamePreferences();
 
         int playerType;
         string playerName;
 
-        // Game mode selection
+        // Sélection du mode de jeu
         switch (gameMode)
         {
             case 1:
-                // Solo mode
+                // Mode solo
                 playerName = this.getPlayerName();
                 playerType = this.getPlayerType();
                 this.InitializePlayer(1, playerName, playerType);
                 break;
             case 2:
-                // Multiplayer mode
+                // Mode multijoueur
                 string playerName1 = this.getPlayerName("Joueur 1");
                 string playerName2 = this.getPlayerName("Joueur 2");
                 int playerType1 = this.getPlayerType("Joueur 1");
@@ -48,47 +56,55 @@ public class Game
                 this.InitializePlayers(2, playerName1, playerType1, playerName2, playerType2);
                 break;
             case 3:
-                // Multiplayer mode against a bot
+                // Mode multijoueur contre un bot
                 playerName = this.getPlayerName();
                 playerType = this.getPlayerType();
                 this.InitializePlayers(2, playerName, playerType, "Bot", 1000);
                 break;
             default:
+                // Si aucun mode de jeu n'est choisi, le jeu se termine
                 Console.WriteLine("Aucun mode de jeu choisi, fin du jeu");
                 System.Environment.Exit(0);
                 break;
         }
 
-        // Local definitions for the game
+        // Définition locale pour la boucle de jeu
         int tourNumber = 0;
         Player currentUser;
 
-        // Game loop
+        // Boucle de jeu principale
         while (state || CurrentMap.isEmpty)
         {
+            // Détermine le joueur actuel en fonction du numéro du tour
             currentUser = Players![tourNumber % Players.Count];
             this.Tour(currentUser);
             tourNumber++;
             if (currentUser.Alive == false)
             {
+                // Si le joueur actuel est mort, le jeu se termine
                 Console.WriteLine($"{currentUser.Name} perd cette partie !");
                 state = false;
                 EndGame();
             }
             else if (currentUser.Winner)
             {
+                // Si le joueur actuel a gagné, le jeu se termine
                 Console.WriteLine($"{currentUser.Name} a gagné cette partie avec un score de {currentUser.Score} !");
                 state = false;
                 EndGame();
             }
         }
     }
+
+    // Affiche le message de bienvenue
     private void PrintWelcomeMessage()
     {
         Console.WriteLine(new string('-', 90));
-        Console.WriteLine("Bienvenue dans le jeu de rôle");
+        Console.WriteLine("Bienvenue dans le jeu HILE");
         Console.WriteLine(new string('-', 90));
     }
+
+    // Affiche les règles du jeu
     private void PrintGameRules()
     {
         Console.WriteLine("Règles du jeu :");
@@ -109,6 +125,8 @@ public class Game
         Console.WriteLine(new string('-', 90));
         Console.WriteLine("Bonne chance !");
     }
+
+    // Récupère les préférences de jeu de l'utilisateur
     private int getUserGamePreferences()
     {
         Console.WriteLine("Choisissez le mode de jeu :");
@@ -128,8 +146,9 @@ public class Game
             new Game();
             return 0;
         }
-
     }
+
+    // Récupère le nom du joueur
     private string getPlayerName(string PlayerId = "Joueur 1")
     {
         Console.WriteLine("Entrez votre nom :");
@@ -137,6 +156,8 @@ public class Game
         Console.WriteLine($"Vous avez choisi le nom {playerName} !");
         return playerName;
     }
+
+    // Récupère le type de joueur
     private int getPlayerType(string PlayerId = "Joueur 1")
     {
         Console.WriteLine("Choisissez votre type de joueur :");
@@ -157,8 +178,9 @@ public class Game
             new Game();
             return 0;
         }
-
     }
+
+    // Initialise un joueur
     private void InitializePlayer(int playersNumber = 1, string playerName1 = "Joueur 1", int playerType1 = 1)
     {
         PlayerType playerType = (PlayerType)playerType1;
@@ -170,12 +192,14 @@ public class Game
             PlayerType.JeanNorbert => typeof(JeanNorbert),
             _ => typeof(Pirate),
         };
-        // Ajout des joueurs et des monstres
+        // Ajout du joueur à la liste des joueurs
         object player = Activator.CreateInstance(SelectedType, new object[] { playerName1, 1, CurrentMap })!;
         Players.Add((Player)player);
 
         this.Initialize();
     }
+
+    // Initialise plusieurs joueurs
     private void InitializePlayers(int playersNumber = 2, string playerName1 = "Joueur 1", int playerType1 = 1, string playerName2 = "Joueur 2", int playerType2 = 1000)
     {
         PlayerType firstplayerType = (PlayerType)playerType1;
@@ -190,7 +214,7 @@ public class Game
             PlayerType.Bot => typeof(Bot),
             _ => typeof(Bot),
         };
-        // Ajout des joueurs et des monstres
+        // Ajout du premier joueur à la liste des joueurs
         object player1 = Activator.CreateInstance(SelectedType, new object[] { playerName1, 1, CurrentMap })!;
         Players.Add((Player)player1);
 
@@ -202,11 +226,14 @@ public class Game
             PlayerType.JeanNorbert => typeof(JeanNorbert),
             _ => typeof(Bot),
         };
+        // Ajout du deuxième joueur à la liste des joueurs
         object player2 = Activator.CreateInstance(SelectedType, new object[] { playerName2, 1, CurrentMap })!;
         Players.Add((Player)player2);
 
         this.Initialize();
     }
+
+    // Initialisation des monstres et des objets sur la carte
     private void Initialize()
     {
         for (int i = 0; i < 10; i++)
@@ -219,33 +246,35 @@ public class Game
         }
         CurrentMap.AddObject(new Book("Cognitique: Science et pratique des relations à la machine à penser"));
     }
+
+    // Gère les actions du joueur en fonction des touches appuyées
     private void ConsoleKeyAction(Player player, ConsoleKeyInfo keyInfo)
     {
         switch (keyInfo.Key)
         {
             case ConsoleKey.Q:
-                player.Move(0, -1, CurrentMap); // Déplacement vers le haut
+                player.Move(0, -1, CurrentMap); // Déplacement vers la gauche
                 break;
             case ConsoleKey.D:
-                player.Move(0, 1, CurrentMap); // Déplacement vers le bas
+                player.Move(0, 1, CurrentMap); // Déplacement vers la droite
                 break;
             case ConsoleKey.Z:
-                player.Move(-1, 0, CurrentMap); // Déplacement vers la gauche
+                player.Move(-1, 0, CurrentMap); // Déplacement vers le haut
                 break;
             case ConsoleKey.S:
-                player.Move(1, 0, CurrentMap); // Déplacement vers la droite
+                player.Move(1, 0, CurrentMap); // Déplacement vers le bas
                 break;
             case ConsoleKey.LeftArrow:
-                player.Move(0, -1, CurrentMap); // Déplacement vers le haut
+                player.Move(0, -1, CurrentMap); // Déplacement vers la gauche
                 break;
             case ConsoleKey.RightArrow:
-                player.Move(0, 1, CurrentMap); // Déplacement vers le bas
+                player.Move(0, 1, CurrentMap); // Déplacement vers la droite
                 break;
             case ConsoleKey.UpArrow:
-                player.Move(-1, 0, CurrentMap); // Déplacement vers la gauche
+                player.Move(-1, 0, CurrentMap); // Déplacement vers le haut
                 break;
             case ConsoleKey.DownArrow:
-                player.Move(1, 0, CurrentMap); // Déplacement vers la droite
+                player.Move(1, 0, CurrentMap); // Déplacement vers le bas
                 break;
             case ConsoleKey.Enter:
                 player.Dig(CurrentMap); // Creuser
@@ -267,11 +296,14 @@ public class Game
                 break;
         }
     }
+
+    // Gère les attaques du joueur
     private void ManageAttack(Player player)
     {
         bool hasAttacked = false;
         Monster? affectedMonster = null;
-        // Console.WriteLine($"{player.Name} - {player.Alive} - {player.GetType()} - {player.isNearby(Players[(Players.IndexOf(player) + 1) % 2], 2)} ");
+
+        // Attaque le joueur adverse si en mode multijoueur
         if (this.Players.Count != 1)
         {
             if (Players[0] == player)
@@ -279,9 +311,11 @@ public class Game
             else
                 player.Attack(Players[0]); // Attaque le joueur 1 si le joueur actuel est le joueur 2
         }
+
+        // Attaque les monstres à proximité
         foreach (var monster in Monsters)
         {
-            if (monster.isNearby(player, player.Spread) && monster.Alive) // Attaque les monstres présent dans une zone de 2 cases
+            if (monster.isNearby(player, player.Spread) && monster.Alive)
             {
                 player.Attack(monster);
                 hasAttacked = true;
@@ -291,27 +325,27 @@ public class Game
         }
         player.Message += (hasAttacked) ? $"\n Vous avez attaqué le monstre {affectedMonster}, il lui reste {affectedMonster!.Health}" : "\n Aucun monstre à attaquer";
     }
+
+    // Gère les actions des monstres
     private void MonstersActions(Player player)
     {
         foreach (var monster in Monsters)
         {
-
             foreach (var user in Players)
             {
                 player.Message += monster.Attack(user);
             }
             monster.Move(CurrentMap);
-
         }
     }
+
+    // Tour de jeu d'un joueur
     private void Tour(Player player)
     {
         CurrentMap.Render(Players, Monsters); // Affichage de la carte
 
         ConsoleKeyInfo keyInfo = Console.ReadKey(); // Lecture de la direction de déplacement
         Console.Clear(); // Efface la console avant d'afficher la carte mise à jour
-
-        // Console.WriteLine(player.GetType());  Ligne de test pour vérifier le type de joueur
 
         if (player.GetType() == typeof(Bot))
             ((Bot)player).Move(CurrentMap);
@@ -323,12 +357,16 @@ public class Game
         player.Mana++; // Régénération de la mana du joueur
         player.DisplayUserState(); // Affichage de l'état du joueur
     }
+
+    // Met le jeu en pause
     public void Pause()
     {
         Console.WriteLine("-----Appuyez sur une touche pour continuer... Appuyez sur Echap pour quitter.-----");
         if (Console.ReadKey().Key == ConsoleKey.Escape)
             Environment.Exit(0);
     }
+
+    // Termine le jeu
     public void EndGame()
     {
         Console.WriteLine("Fin du jeu");
@@ -341,6 +379,5 @@ public class Game
         }
         Console.Clear();
         new Game();
-
     }
 }
